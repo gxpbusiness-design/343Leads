@@ -2260,11 +2260,22 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 
 /* Save bar */
 .mp-save-bar{
-  position:sticky;bottom:0;padding:14px 0;
-  background:linear-gradient(transparent,var(--black) 40%);
+  position:fixed;
+  bottom:0;
+  left:76px;   /* sidebar width */
+  right:0;
+  padding:14px 28px;
+  background:linear-gradient(transparent 0%, var(--black) 45%);
   display:flex;gap:10px;justify-content:flex-end;
-  margin-top:24px;
+  z-index:50;
+  pointer-events:none;
 }
+.mp-save-bar button{pointer-events:all;}
+/* Adjust for different sidebar widths */
+.app.bubble-mode .mp-save-bar{left:80px;}
+.app.grid-mode .mp-save-bar{left:74px;}
+/* Add bottom padding to mp-edit so content isn't hidden behind bar */
+.mp-edit{padding-bottom:72px !important;}
 .mp-save-btn{
   padding:10px 28px;border-radius:10px;
   background:var(--c1);color:#fff;border:none;cursor:pointer;
@@ -2672,6 +2683,354 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 .dup-apply:hover{background:var(--c1-l);}
 
 
+
+/* ══ WIZ PHONEBOOK PICKER MODAL ═══════════════════════════ */
+.wiz-pb-overlay{
+  position:fixed;inset:0;z-index:1200;
+  background:rgba(0,0,0,.65);backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.wiz-pb-overlay.open{opacity:1;pointer-events:all;}
+.wiz-pb-modal{
+  width:520px;max-width:96vw;max-height:88vh;
+  background:var(--surf);border:1px solid var(--border);border-radius:20px;
+  display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 32px 80px rgba(0,0,0,.55);
+  transform:translateY(12px) scale(.98);transition:transform .2s;
+}
+.wiz-pb-overlay.open .wiz-pb-modal{transform:translateY(0) scale(1);}
+.wiz-pb-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 22px 14px;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.wiz-pb-title{font-family:var(--font-disp);font-size:17px;font-weight:700;color:var(--text);}
+.wiz-pb-close{
+  width:30px;height:30px;border-radius:50%;background:var(--surf3);border:1px solid var(--border);
+  color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;line-height:1;
+  transition:all .13s;flex-shrink:0;
+}
+.wiz-pb-close:hover{background:rgba(220,60,60,.12);color:#E05555;border-color:rgba(220,60,60,.3);}
+.wiz-pb-search-wrap{
+  padding:12px 18px;border-bottom:1px solid var(--border);flex-shrink:0;position:relative;
+}
+.wiz-pb-search{
+  width:100%;box-sizing:border-box;
+  background:var(--surf2);border:1px solid var(--border);border-radius:10px;
+  padding:9px 12px 9px 34px;font-size:12.5px;color:var(--text);outline:none;
+  transition:border-color .15s;
+}
+.wiz-pb-search:focus{border-color:rgba(var(--c1-rgb),.45);}
+.wiz-pb-search-icon{position:absolute;left:30px;top:50%;transform:translateY(-50%);opacity:.4;pointer-events:none;}
+.wiz-pb-list{flex:1;overflow-y:auto;padding:8px 14px;}
+.wiz-pb-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 8px;border-radius:10px;cursor:pointer;
+  transition:background .13s;border-bottom:1px solid var(--border);
+}
+.wiz-pb-item:last-child{border-bottom:none;}
+.wiz-pb-item:hover{background:var(--surf2);}
+.wiz-pb-item.selected{background:var(--c1-d);}
+.wiz-pb-av{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  background:var(--c1-d);color:var(--c1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;letter-spacing:.02em;
+}
+.wiz-pb-item.selected .wiz-pb-av{background:var(--c1);color:#fff;}
+.wiz-pb-info{flex:1;min-width:0;}
+.wiz-pb-name{font-size:13px;font-weight:600;color:var(--text);}
+.wiz-pb-role{font-size:11px;color:var(--text2);margin-top:1px;}
+.wiz-pb-check{
+  width:20px;height:20px;border-radius:5px;flex-shrink:0;
+  border:2px solid var(--border);background:var(--surf3);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .13s;
+}
+.wiz-pb-item.selected .wiz-pb-check{background:var(--c1);border-color:var(--c1);}
+.wiz-pb-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;border-top:1px solid var(--border);flex-shrink:0;
+  background:var(--surf);
+}
+.wiz-pb-sel-count{font-size:11.5px;color:var(--text2);}
+.wiz-pb-sel-count strong{color:var(--c1);}
+.wiz-pb-empty{text-align:center;padding:48px 20px;color:var(--text2);font-size:12.5px;}
+
+
+/* ══ NEP CONTACT SECTION ════════════════════════════════════ */
+.nep-contact-card{
+  background:var(--surf2);border:1px solid var(--border);border-radius:12px;
+  padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;
+}
+.nep-contact-av{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  background:var(--c1-d);color:var(--c1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11.5px;font-weight:700;
+}
+.nep-contact-info{flex:1;min-width:0;}
+.nep-contact-name{font-size:calc(13px * var(--ts));font-weight:600;color:var(--text);}
+.nep-contact-sub{font-size:calc(10.5px * var(--ts));color:var(--text2);margin-top:1px;}
+.nep-contact-email{font-size:calc(10.5px * var(--ts));color:var(--c1);margin-top:2px;}
+.nep-contact-clear{
+  width:24px;height:24px;border-radius:50%;background:var(--surf3);
+  border:1px solid var(--border);color:var(--text2);
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+  cursor:pointer;flex-shrink:0;transition:all .13s;line-height:1;
+}
+.nep-contact-clear:hover{background:rgba(220,60,60,.12);color:#E05555;border-color:rgba(220,60,60,.3);}
+.nep-contact-empty{
+  border:1.5px dashed var(--border);border-radius:12px;
+  padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;
+  color:var(--text2);font-size:calc(11.5px * var(--ts));
+}
+.nep-contact-fields{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;
+}
+.nep-contact-fields .nep-cf-full{grid-column:1/-1;}
+.nep-contact-input{
+  width:100%;box-sizing:border-box;
+  background:var(--surf2);border:1px solid var(--border);border-radius:8px;
+  padding:8px 10px;font-size:calc(11.5px * var(--ts));color:var(--text);outline:none;
+  transition:border-color .15s;
+}
+.nep-contact-input:focus{border-color:rgba(var(--c1-rgb),.45);}
+.nep-contact-input::placeholder{color:var(--muted);}
+.nep-pb-pick-btn{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 12px;border-radius:8px;
+  background:var(--c1-d);border:1px solid rgba(var(--c1-rgb),.3);
+  color:var(--c1);font-size:calc(11px * var(--ts));font-weight:600;cursor:pointer;
+  transition:all .13s;white-space:nowrap;flex-shrink:0;
+}
+.nep-pb-pick-btn:hover{background:rgba(var(--c1-rgb),.2);}
+
+
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE RESPONSIVE  ≤ 768px
+   Desktop layout is untouched — all rules scoped to ≤768
+   ═══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── Root / app shell ─────────────────────────── */
+  :root {
+    --pad: 14px;
+  }
+
+  /* Sidebar moves to a bottom tab bar */
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 60px;
+    grid-template-areas:
+      "main"
+      "sidebar";
+  }
+
+  .sidebar {
+    grid-area: sidebar;
+    width: 100%;
+    height: 60px;
+    flex-direction: row;
+    padding: 0;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0;
+    overflow: hidden;
+    z-index: 200;
+  }
+
+  /* Hide decorative ::before on sidebar */
+  .sidebar::before { display: none; }
+
+  .nb {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    flex-direction: column;
+    gap: 2px;
+    padding: 4px 2px;
+    justify-content: center;
+    align-items: center;
+  }
+  .nb svg { width: 20px; height: 20px; }
+  .nb-lbl { font-size: 7px; letter-spacing: .04em; display: block; }
+
+  /* Sidebar bubble / grid mode tweaks for mobile */
+  .app.bubble-mode .sidebar,
+  .app.grid-mode .sidebar {
+    margin: 0; border-radius: 0; height: 60px; width: 100%;
+  }
+  .app.bubble-mode,
+  .app.grid-mode { grid-template-columns: 1fr; }
+
+  /* ── Main / Topbar ────────────────────────────── */
+  .main {
+    grid-area: main;
+    overflow: hidden;
+  }
+
+  .topbar { padding: 10px 14px; gap: 8px; }
+  .tb-title { font-size: calc(17px * var(--ts)); }
+  .tb-chip { display: none; }        /* hide subtitle chips on mobile */
+
+  /* ── Page / Tab scroll container ─────────────── */
+  .page {
+    padding: var(--pad) 14px 80px;
+  }
+  .app.grid-mode .tab { padding: 14px; }
+
+  /* ── Section headers ──────────────────────────── */
+  .sec-head { flex-wrap: wrap; gap: 7px; }
+  .sec-head h2 { font-size: calc(16px * var(--ts)); }
+
+  /* ── Stats grid (settings) ────────────────────── */
+  .sg { grid-template-columns: 1fr; }
+
+  /* ── Campaign cards grid ──────────────────────── */
+  .games-grid-v2 {
+    grid-template-columns: 1fr;
+  }
+
+  /* ── Phone Book toolbar ───────────────────────── */
+  .pb-toolbar { flex-wrap: wrap; }
+  .pb-toolbar .sr { width: 100%; order: -1; }
+
+  /* ── Email: stack list + reader vertically ────── */
+  .email-shell { flex-direction: column; height: calc(100vh - 130px); }
+  .email-list-pane {
+    width: 100%; height: 220px; border-right: none;
+    border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+  .email-reader-pane { flex: 1; min-height: 0; }
+
+  /* ── My Page hero ─────────────────────────────── */
+  .mp-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 20px 16px 16px;
+  }
+  .mp-hero-actions { align-self: stretch; }
+  .mp-hero-actions .sb { flex: 1; justify-content: center; }
+  .mp-bio-preview { max-width: 100%; }
+
+  /* ── My Page edit grids ───────────────────────── */
+  .mp-grid2, .mp-grid3 {
+    grid-template-columns: 1fr;
+  }
+  .mp-links-grid { grid-template-columns: 1fr; }
+
+  /* ── My Page save bar ─────────────────────────── */
+  .mp-save-bar {
+    left: 0;   /* sidebar is at bottom, not left */
+    bottom: 60px;  /* sit above the bottom nav bar */
+    padding: 12px 16px;
+  }
+
+  /* ── Campaign Wizard modal ────────────────────── */
+  .wizard-panel {
+    width: 100%;
+    max-width: 100%;
+    max-height: calc(100dvh - 60px);
+    border-radius: 20px 20px 0 0;
+    margin-top: auto;
+  }
+  .wizard-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .wizard-head { padding: 18px 18px 0; }
+  .wizard-body { padding: 16px 18px; }
+  .wizard-foot { padding: 14px 18px; }
+
+  /* Wizard person fields */
+  .wf-person-fields { grid-template-columns: 1fr; }
+  .wf-add-person-btn { font-size: calc(11.5px * var(--ts)); padding: 10px 10px; }
+
+  /* ── Add Lead / Edit modal ────────────────────── */
+  .al-modal {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    max-height: 92dvh;
+  }
+  .al-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .al-grid { grid-template-columns: 1fr; }
+  .al-field.full { grid-column: 1; }
+
+  /* ── PB Import modal ──────────────────────────── */
+  .pb-import-modal {
+    width: 100%;
+    border-radius: 20px 20px 0 0;
+    max-height: 90dvh;
+  }
+  .pb-import-overlay { align-items: flex-end; padding: 0; }
+
+  /* ── Phonebook picker (wiz) ───────────────────── */
+  .wiz-pb-modal {
+    width: 100%;
+    border-radius: 20px 20px 0 0;
+    max-height: 90dvh;
+  }
+  .wiz-pb-overlay { align-items: flex-end; padding: 0; }
+
+  /* ── Board view ───────────────────────────────── */
+  .board-topbar { padding: 12px 14px; }
+  .board-name { font-size: calc(16px * var(--ts)); }
+  .board-view-toggle { display: none; } /* hide map/col toggle on mobile, col only */
+
+  /* ── Node edit overlay panel ──────────────────── */
+  .node-edit-panel {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    padding: 20px 18px;
+    max-height: 90dvh;
+    overflow-y: auto;
+  }
+  .node-edit-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .nep-contact-fields { grid-template-columns: 1fr; }
+  .nep-contact-fields .nep-cf-full { grid-column: 1; }
+
+  /* ── Column view ──────────────────────────────── */
+  .col-lane { max-width: 100%; padding-left: 36px; }
+  .col-node-card { padding: 10px 12px; }
+
+  /* ── List rows ────────────────────────────────── */
+  .li { padding: 10px 12px; }
+  .cc-r { display: none; }  /* hide right meta on tiny screens */
+
+  /* ── Home tab ─────────────────────────────────── */
+  .home-layout { flex-direction: column; padding: 24px 20px; gap: 18px; }
+  .home-left { max-width: 100%; }
+  .home-name { font-size: clamp(26px, 7vw, 42px); }
+  .home-stats { position: static; flex-wrap: wrap; gap: 18px; margin-top: 20px; }
+  .home-fab-group { bottom: 70px; } /* above bottom nav */
+
+  /* ── Modals: general ──────────────────────────── */
+  .modal { width: 96vw; }
+  .modal-overlay .modal { max-width: 100%; }
+}
+
+/* ─── Extra small ≤ 400px ─────────────────────────────── */
+@media (max-width: 400px) {
+  .nb-lbl { display: none; }  /* just icons on very small screens */
+  .nb { gap: 0; }
+  .topbar { padding: 9px 12px; }
+  .tb-title { font-size: calc(15px * var(--ts)); }
+}
+
 </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -3023,7 +3382,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
       <canvas class="grid-lines-canvas" id="pb-grid-canvas"></canvas>
       <div class="sec-head mb14"><h2>Phone Book</h2><span class="eyebrow" id="phonebook-count">0 Leads</span><div style="flex:1"></div>
         <label class="sb" style="cursor:pointer;">Import<input type="file" accept=".csv,.json" style="display:none" onchange="importPhonebook(event)"></label>
-        <button class="sb p" style="margin-left:6px;">+ Add Lead</button>
+        <button class="sb p" style="margin-left:6px;" onclick="openAddLeadModal()">+ Add Lead</button>
       </div>
       <div class="pb-toolbar">
         <div class="sr" style="flex:1"><span class="si-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><input type="text" class="si" id="phonebook-search" oninput="renderPhonebook()"></div>
@@ -3431,9 +3790,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
           </div>
         </div>
         <div class="ss full">
-          <div class="st">Display Font — 10 Styles</div>
+          <div class="st">Display Font — 11 Styles</div>
           <div class="font-g">
-            <div class="fo on" onclick="setFont('Cormorant Garamond',this)"><div class="fo-s" style="font-family:'Cormorant Garamond',serif">Aa</div><div class="fo-n">Cormorant</div></div>
+            <div class="fo on" id="fo-apple" onclick="setFont('apple-system',this)"><div class="fo-s" style="font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',system-ui,sans-serif">Aa</div><div class="fo-n">Apple</div></div>
+            <div class="fo" onclick="setFont('Cormorant Garamond',this)"><div class="fo-s" style="font-family:'Cormorant Garamond',serif">Aa</div><div class="fo-n">Cormorant</div></div>
             <div class="fo" onclick="setFont('Playfair Display',this)"><div class="fo-s" style="font-family:'Playfair Display',serif">Aa</div><div class="fo-n">Playfair</div></div>
             <div class="fo" onclick="setFont('Cinzel',this)"><div class="fo-s" style="font-family:'Cinzel',serif">Aa</div><div class="fo-n">Cinzel</div></div>
             <div class="fo" onclick="setFont('DM Serif Display',this)"><div class="fo-s" style="font-family:'DM Serif Display',serif">Aa</div><div class="fo-n">DM Serif</div></div>
@@ -5031,62 +5391,140 @@ function formatPhone(v) {
   return `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6,10)}`;
 }
 
+/* ── Phone Book Picker Modal (for wizard) ─────────────────── */
+let _wizPbContacts  = [];   // full available list
+let _wizPbFiltered  = [];   // current filtered list
+let _wizPbSelected  = new Set(); // selected indices into _wizPbContacts
+
 function wizImportFromPhonebook() {
-  // Merge campaign contacts + phonebook contacts (same as renderPhonebook)
+  // Build available list: phonebook + campaign contacts, dedupe against already-added
+  wizSavePeopleFields();
   const allContacts = [];
-  games.forEach(g => { if (g.contact?.name) allContacts.push({...g.contact, campaign: g.name}); });
+  games.forEach(g => { if (g.contact?.name) allContacts.push({...g.contact}); });
   phonebookContacts.forEach(c => allContacts.push(c));
 
   if (!allContacts.length) {
     showSaveToast('Your Phone Book is empty — add leads there first'); return;
   }
-  // Show a quick picker inside the wiz body
-  wizSavePeopleFields();
   const existingNames  = new Set((wizData.people||[]).map(p=>(p.name||'').toLowerCase()).filter(Boolean));
   const existingEmails = new Set((wizData.people||[]).map(p=>p.email).filter(Boolean));
-  const avail = allContacts.filter(c =>
+  _wizPbContacts = allContacts.filter(c =>
     !existingEmails.has(c.email) && !existingNames.has((c.name||'').toLowerCase())
   );
-  if (!avail.length) { showSaveToast('All Phone Book contacts are already added'); return; }
+  if (!_wizPbContacts.length) {
+    showSaveToast('All Phone Book contacts are already in this campaign'); return;
+  }
+  _wizPbSelected = new Set();
+  _wizPbFiltered = [..._wizPbContacts];
 
-  const overlay = document.getElementById('node-edit-overlay');
-  overlay.innerHTML = `
-    <div class="node-edit-panel" style="max-height:70vh;display:flex;flex-direction:column;">
-      <div class="nep-head">
-        <div class="nep-title">Import from Phone Book</div>
-        <button class="nep-close" onclick="closeNodeEdit()"></button>
-      </div>
-      <div style="flex:1;overflow-y:auto;padding-bottom:4px;">
-        ${avail.map((c,i) => `
-          <label style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer;">
-            <input type="checkbox" id="pbimport-${i}" style="width:16px;height:16px;accent-color:var(--c1);" value="${i}">
-            <div style="width:30px;height:30px;border-radius:50%;background:var(--c1-d);color:var(--c1);display:flex;align-items:center;justify-content:center;font-size:calc(10px * var(--ts));font-weight:700;flex-shrink:0;">${initials(c.name||'?')}</div>
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:calc(12px * var(--ts));font-weight:600;color:var(--text);">${escHtml(c.name||'')}</div>
-              <div style="font-size:calc(10.5px * var(--ts));color:var(--muted);">${escHtml(c.role||'')}${c.company?` · ${escHtml(c.company)}`:''}</div>
-            </div>
-          </label>`).join('')}
-      </div>
-      <div style="display:flex;gap:8px;padding-top:14px;">
-        <button class="wf-next" style="flex:1;" onclick="wizDoImport(${JSON.stringify(avail).replace(/</g,'&lt;')})">Add Selected</button>
-        <button class="wf-back" onclick="closeNodeEdit()">Cancel</button>
-      </div>
-    </div>`;
-  overlay.classList.add('open');
+  // Clear search
+  const search = document.getElementById('wiz-pb-search');
+  if (search) search.value = '';
+
+  wizPbRenderList();
+  document.getElementById('wiz-pb-overlay').classList.add('open');
 }
 
-function wizDoImport(contacts) {
-  const checked = [...document.querySelectorAll('[id^="pbimport-"]:checked')].map(el => parseInt(el.value));
-  if (!checked.length) { closeNodeEdit(); return; }
-  checked.forEach(i => {
-    const c = contacts[i];
-    if (!wizData.people) wizData.people = [];
-    // Remove blank placeholder first person if still empty
-    if (wizData.people.length === 1 && !wizData.people[0].name) wizData.people = [];
-    wizData.people.push({ name:c.name||'', role:c.role||'', company:c.company||'', email:c.email||'', phone:c.phone||'', comm:c.comm||'email' });
+function wizPbClose() {
+  document.getElementById('wiz-pb-overlay').classList.remove('open');
+}
+
+function wizPbFilter(q) {
+  const lc = (q||'').toLowerCase().trim();
+  _wizPbFiltered = lc
+    ? _wizPbContacts.filter(c =>
+        (c.name||'').toLowerCase().includes(lc) ||
+        (c.role||'').toLowerCase().includes(lc) ||
+        (c.company||'').toLowerCase().includes(lc) ||
+        (c.email||'').toLowerCase().includes(lc)
+      )
+    : [..._wizPbContacts];
+  wizPbRenderList();
+}
+
+function wizPbRenderList() {
+  const list = document.getElementById('wiz-pb-list');
+  if (!list) return;
+
+  if (!_wizPbFiltered.length) {
+    list.innerHTML = '<div class="wiz-pb-empty">No contacts found</div>';
+    wizPbUpdateCount();
+    return;
+  }
+
+  list.innerHTML = _wizPbFiltered.map((c, fi) => {
+    // Find actual index in _wizPbContacts for selection tracking
+    const realIdx = _wizPbContacts.indexOf(c);
+    const sel = _wizPbSelected.has(realIdx);
+    const av  = initials(c.name || '?');
+    const sub = [c.role, c.company].filter(Boolean).join(' · ');
+    return `<div class="wiz-pb-item${sel?' selected':''}" onclick="wizPbToggle(${realIdx})" id="wiz-pb-item-${realIdx}">
+      <div class="wiz-pb-av">${escHtml(av)}</div>
+      <div class="wiz-pb-info">
+        <div class="wiz-pb-name">${escHtml(c.name||'')}</div>
+        ${sub ? `<div class="wiz-pb-role">${escHtml(sub)}</div>` : ''}
+      </div>
+      <div class="wiz-pb-check">
+        ${sel ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  wizPbUpdateCount();
+}
+
+function wizPbToggle(realIdx) {
+  if (_wizPbSelected.has(realIdx)) {
+    _wizPbSelected.delete(realIdx);
+  } else {
+    _wizPbSelected.add(realIdx);
+  }
+  // Just re-render the single item for performance
+  const c   = _wizPbContacts[realIdx];
+  const sel = _wizPbSelected.has(realIdx);
+  const item = document.getElementById('wiz-pb-item-'+realIdx);
+  if (item) {
+    item.className = 'wiz-pb-item' + (sel ? ' selected' : '');
+    const av = item.querySelector('.wiz-pb-av');
+    if (av) av.style.background = sel ? 'var(--c1)' : 'var(--c1-d)';
+    if (av) av.style.color = sel ? '#fff' : 'var(--c1)';
+    const chk = item.querySelector('.wiz-pb-check');
+    if (chk) chk.innerHTML = sel ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>' : '';
+  }
+  wizPbUpdateCount();
+}
+
+function wizPbUpdateCount() {
+  const n    = _wizPbSelected.size;
+  const cnt  = document.getElementById('wiz-pb-count');
+  const done = document.getElementById('wiz-pb-done-btn');
+  if (cnt)  cnt.innerHTML  = n ? `<strong>${n}</strong> contact${n!==1?'s':''} selected` : 'No contacts selected';
+  if (done) done.textContent = n ? `Add ${n} Contact${n!==1?'s':''}` : 'Done';
+}
+
+function wizPbDone() {
+  if (!_wizPbSelected.size) { wizPbClose(); return; }
+  if (!wizData.people) wizData.people = [];
+  // Remove lone blank placeholder
+  if (wizData.people.length === 1 && !wizData.people[0].name) wizData.people = [];
+
+  _wizPbSelected.forEach(idx => {
+    const c = _wizPbContacts[idx];
+    if (!c) return;
+    wizData.people.push({
+      name:c.name||'', role:c.role||'', company:c.company||c.dept||'',
+      email:c.email||'', phone:c.phone||'', comm:c.comm||'email'
+    });
   });
-  closeNodeEdit();
+
+  wizPbClose();
   renderWiz();
+  showSaveToast(`Added ${_wizPbSelected.size} contact${_wizPbSelected.size!==1?'s':''}`);
+}
+
+// Legacy stub kept for safety
+function wizDoImport(contacts) {
+  wizPbDone();
 }
 
 function wizSetComm(i, val, el) {
@@ -5640,7 +6078,7 @@ function renderColumnView() {
     return `<div class="col-node" draggable="true" data-idx="${i}">
       <div class="col-rank">${chessRanks[i] || i+1}</div>
       <div class="col-node-dot ${dotCls[s.status]||''}"></div>
-      <div class="col-node-card ${cardCls[s.status]||''}" oncontextmenu="colCtx(event,'${s.id}')">
+      <div class="col-node-card ${cardCls[s.status]||''}" onclick="openNodeEdit('${s.id}')" oncontextmenu="colCtx(event,'${s.id}')">
         <div class="col-node-type" style="color:${capColor};">${lbl}</div>
         <div class="col-node-title">${s.title}</div>
         <div class="col-node-meta">${s.status}</div>
@@ -5689,7 +6127,7 @@ function showCtx(e, sid) {
 }
 function closeCtx() { document.getElementById('ctx-menu').classList.remove('open'); ctxTargetId=null; }
 document.addEventListener('click', e => { if (!document.getElementById('ctx-menu').contains(e.target)) closeCtx(); });
-document.addEventListener('keydown', e => { if (e.key==='Escape') { closeAddLeadModal(); closeCtx(); wizClose(); closeBoardView(); closeCampCtx(); closeNodeEdit(); } });
+document.addEventListener('keydown', e => { if (e.key==='Escape') { closeAddLeadModal(); closeCtx(); wizClose(); closeBoardView(); closeCampCtx(); closeNodeEdit(); wizPbClose && wizPbClose(); } });
 
 function ctxGetStep() {
   const g = games.find(x=>x.id===activeBoardId); if(!g) return null;
@@ -5862,12 +6300,20 @@ function custC1(v){ applyC1(v,h2r(v),v); }
 function custC2(v){ applyComp(v,h2r(v)); }
 function setComp(hex,rgb,btn){ applyComp('#'+hex, rgb); }
 function setFont(f, btn) {
-  const sansFamily = ['Raleway','Josefin Sans'];
-  const serif = sansFamily.includes(f) ? 'sans-serif' : 'serif';
-  document.documentElement.style.setProperty('--font-disp', `'${f}',Georgia,${serif}`);
-  document.documentElement.style.setProperty('--font-body', `'${f}',system-ui,${serif}`);
+  if (f === 'apple-system') {
+    // Native Apple / SF Pro system font stack
+    document.documentElement.style.setProperty('--font-disp', "-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text',system-ui,sans-serif");
+    document.documentElement.style.setProperty('--font-body',  "-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif");
+  } else {
+    const sansFamily = ['Raleway','Josefin Sans'];
+    const serif = sansFamily.includes(f) ? 'sans-serif' : 'serif';
+    document.documentElement.style.setProperty('--font-disp', `'${f}',Georgia,${serif}`);
+    document.documentElement.style.setProperty('--font-body', `'${f}',system-ui,${serif}`);
+  }
   document.querySelectorAll('.fo').forEach(o => o.classList.remove('on'));
   if (btn) btn.classList.add('on');
+  // Store font name for UI sync on reload
+  try { localStorage.setItem('343leads_font', f); } catch(e) {}
 }
 
 /* ══════════════════════════════════════════
@@ -6990,6 +7436,21 @@ function loadAll() {
   if (state.fontDisp) {
     rs.setProperty('--font-disp', state.fontDisp);
     rs.setProperty('--font-body', state.fontBody || state.fontDisp);
+    // Sync .fo highlight
+    const savedFont = localStorage.getItem('343leads_font');
+    if (savedFont) {
+      setTimeout(() => {
+        document.querySelectorAll('.fo').forEach(o => o.classList.remove('on'));
+        if (savedFont === 'apple-system') {
+          const el = document.getElementById('fo-apple');
+          if (el) el.classList.add('on');
+        } else {
+          document.querySelectorAll('.fo').forEach(o => {
+            if (o.getAttribute('onclick')?.includes(savedFont)) o.classList.add('on');
+          });
+        }
+      }, 50);
+    }
   }
   if (state.cardR) rs.setProperty('--card-r', state.cardR);
   if (state.pad)   rs.setProperty('--pad',    state.pad);
@@ -7989,9 +8450,31 @@ function openNodeEdit(stepId) {
   const campaignPeople = (g.people||[]).filter(p=>p.name);
   const selPeople = s.people||[];
 
+  // Contact assigned to this step
+  const sc = s.contact || {};
+
+  // Build contact section HTML
+  const contactSection = `
+    <label class="wf-label" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <span>Contact</span>
+      <button class="nep-pb-pick-btn" onclick="nepOpenPbPicker('${stepId}')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        From Phone Book
+      </button>
+    </label>
+    <div class="nep-contact-fields" id="nep-contact-fields">
+      <div class="nep-cf-full">
+        <input class="nep-contact-input" id="nep-c-name" placeholder="Full name" value="${escHtml(sc.name||'')}">
+      </div>
+      <input class="nep-contact-input" id="nep-c-role" placeholder="Role / Title" value="${escHtml(sc.role||'')}">
+      <input class="nep-contact-input" id="nep-c-company" placeholder="Company" value="${escHtml(sc.company||'')}">
+      <input class="nep-contact-input" id="nep-c-email" placeholder="Email address" value="${escHtml(sc.email||'')}">
+      <input class="nep-contact-input" id="nep-c-phone" placeholder="Phone number" value="${escHtml(sc.phone||'')}">
+    </div>`;
+
   const overlay = document.getElementById('node-edit-overlay');
   overlay.innerHTML = `
-    <div class="node-edit-panel" style="max-height:82vh;overflow-y:auto;">
+    <div class="node-edit-panel" style="max-height:88vh;overflow-y:auto;padding-bottom:8px;">
       <div class="nep-head">
         <div class="nep-title">Edit Step</div>
         <button class="nep-close" onclick="closeNodeEdit()"></button>
@@ -8009,6 +8492,8 @@ function openNodeEdit(stepId) {
       <div class="nep-status-row">
         ${statuses.map(st => `<button class="nep-stat-btn ${s.status===st?'on':''}" onclick="nepSetStatus('${stepId}','${st}',this)">${statusLabels[st]||st}</button>`).join('')}
       </div>
+
+      ${contactSection}
 
       ${campaignPeople.length ? `
       <label class="wf-label">People on this step</label>
@@ -8045,6 +8530,93 @@ function openNodeEdit(stepId) {
     </div>`;
   overlay.classList.add('open');
   setTimeout(() => document.getElementById('nep-title-input')?.focus(), 60);
+}
+
+/* ── Phone Book picker for step contact ───────────────────── */
+let _nepPickStepId = null;
+
+function nepOpenPbPicker(stepId) {
+  _nepPickStepId = stepId;
+
+  // Build full contact list (phonebook + campaign contacts)
+  const allContacts = [];
+  phonebookContacts.forEach(c => allContacts.push(c));
+  games.forEach(g => { if (g.contact?.name) allContacts.push({...g.contact}); });
+
+  if (!allContacts.length) {
+    showSaveToast('Your Phone Book is empty — add contacts there first');
+    return;
+  }
+
+  // Reuse wiz-pb-overlay but set a special mode flag
+  _wizPbContacts  = allContacts;
+  _wizPbFiltered  = [...allContacts];
+  _wizPbSelected  = new Set();
+  _nepPickMode    = true;   // single-select autofill mode
+
+  const search = document.getElementById('wiz-pb-search');
+  if (search) search.value = '';
+
+  // Update modal title and button for single-select mode
+  const title = document.querySelector('#wiz-pb-overlay .wiz-pb-title');
+  if (title) title.textContent = 'Pick a Contact';
+  const doneBtn = document.getElementById('wiz-pb-done-btn');
+  if (doneBtn) doneBtn.textContent = 'Select';
+
+  wizPbRenderList();
+  document.getElementById('wiz-pb-overlay').classList.add('open');
+}
+
+// Patch wizPbToggle so single-select mode auto-closes on pick
+const _origWizPbToggle = wizPbToggle;
+function wizPbToggle(realIdx) {
+  if (_nepPickMode) {
+    // Single-select: pick and autofill immediately
+    const c = _wizPbContacts[realIdx];
+    if (c) nepAutofillContact(c);
+    wizPbClose();
+    _nepPickMode = false;
+    // Restore modal title
+    const title = document.querySelector('#wiz-pb-overlay .wiz-pb-title');
+    if (title) title.textContent = 'Add from Phone Book';
+    const doneBtn = document.getElementById('wiz-pb-done-btn');
+    if (doneBtn) doneBtn.textContent = 'Done';
+    return;
+  }
+  _origWizPbToggle(realIdx);
+}
+
+// Patch wizPbDone — in nep mode just close
+const _origWizPbDone = wizPbDone;
+function wizPbDone() {
+  if (_nepPickMode) {
+    wizPbClose();
+    _nepPickMode = false;
+    return;
+  }
+  _origWizPbDone();
+}
+
+let _nepPickMode = false;
+
+function nepAutofillContact(c) {
+  const set = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val || '';
+  };
+  set('nep-c-name',    c.name);
+  set('nep-c-role',    c.role);
+  set('nep-c-company', c.company || c.dept);
+  set('nep-c-email',   c.email);
+  set('nep-c-phone',   c.phone);
+  // Briefly flash the fields to show autofill happened
+  const fields = document.getElementById('nep-contact-fields');
+  if (fields) {
+    fields.style.transition = 'background .15s';
+    fields.style.background = 'rgba(var(--c1-rgb),.08)';
+    setTimeout(() => { fields.style.background = ''; }, 600);
+  }
+  showSaveToast(`Filled in ${c.name}`);
 }
 
 function closeNodeEdit() {
@@ -8125,6 +8697,17 @@ function nepSave(stepId) {
     if (deadEl)  s.deadline = deadEl.value;
     if (mtBtn)   s.meetType = mtBtn.dataset.mt;
     if (checked.length) s.people = checked;
+    // Save contact fields
+    const cName    = document.getElementById('nep-c-name')?.value.trim()    || '';
+    const cRole    = document.getElementById('nep-c-role')?.value.trim()    || '';
+    const cCompany = document.getElementById('nep-c-company')?.value.trim() || '';
+    const cEmail   = document.getElementById('nep-c-email')?.value.trim()   || '';
+    const cPhone   = document.getElementById('nep-c-phone')?.value.trim()   || '';
+    if (cName || cEmail || cPhone) {
+      s.contact = { name:cName, role:cRole, company:cCompany, email:cEmail, phone:cPhone };
+    } else {
+      delete s.contact;
+    }
   }
   closeNodeEdit();
   setBoardView(boardViewMode);
@@ -8369,6 +8952,93 @@ function nepSave(stepId) {
       <button class="gtut-next" id="gtut-next-btn" onclick="gtutNext()">
         Next <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ WIZ PHONEBOOK PICKER MODAL ═══════ -->
+<div class="wiz-pb-overlay" id="wiz-pb-overlay">
+  <div class="wiz-pb-modal">
+    <div class="wiz-pb-head">
+      <div class="wiz-pb-title">Add from Phone Book</div>
+      <button class="wiz-pb-close" onclick="wizPbClose()">&#215;</button>
+    </div>
+    <div class="wiz-pb-search-wrap">
+      <svg class="wiz-pb-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="wiz-pb-search" id="wiz-pb-search" placeholder="Search contacts…" oninput="wizPbFilter(this.value)">
+    </div>
+    <div class="wiz-pb-list" id="wiz-pb-list">
+      <div class="wiz-pb-empty">No contacts found</div>
+    </div>
+    <div class="wiz-pb-foot">
+      <div class="wiz-pb-sel-count" id="wiz-pb-count">No contacts selected</div>
+      <div style="display:flex;gap:8px;">
+        <button class="wf-back" onclick="wizPbClose()">Cancel</button>
+        <button class="wf-next" id="wiz-pb-done-btn" onclick="wizPbDone()" style="min-width:90px;">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ ADD / EDIT LEAD MODAL ═══════ -->
+<div class="al-overlay" id="al-overlay" onclick="if(event.target===this)closeAddLeadModal()">
+  <div class="al-modal">
+    <div class="al-head">
+      <div class="al-title" id="al-modal-title">Add Lead</div>
+      <button class="al-close" onclick="closeAddLeadModal()">
+        <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+      </button>
+    </div>
+    <input type="hidden" id="al-contact-id">
+    <div class="al-body">
+      <div class="al-grid">
+        <div class="al-field full">
+          <label class="al-label">Full Name *</label>
+          <input class="al-input" id="al-name" placeholder="e.g. Jordan Smith" autocomplete="off">
+        </div>
+        <div class="al-field">
+          <label class="al-label">Role / Title</label>
+          <input class="al-input" id="al-role" placeholder="e.g. Creative Director">
+        </div>
+        <div class="al-field">
+          <label class="al-label">Company</label>
+          <input class="al-input" id="al-company" placeholder="e.g. Acme Studio">
+        </div>
+        <div class="al-field">
+          <label class="al-label">Email</label>
+          <input class="al-input" id="al-email" type="email" placeholder="name@example.com">
+        </div>
+        <div class="al-field">
+          <label class="al-label">Phone</label>
+          <input class="al-input" id="al-phone" type="tel" placeholder="+1 (555) 000-0000">
+        </div>
+        <div class="al-field full">
+          <label class="al-label">Lead Type</label>
+          <select class="al-select" id="al-type">
+            <option value="">— Select type —</option>
+            <option value="Outreach">Outreach</option>
+            <option value="Partnership">Partnership</option>
+            <option value="Sales">Sales</option>
+            <option value="Fundraising">Fundraising</option>
+            <option value="Hiring">Hiring</option>
+            <option value="PR / Media">PR / Media</option>
+            <option value="Client Success">Client Success</option>
+            <option value="Internal">Internal</option>
+          </select>
+        </div>
+        <div class="al-field full">
+          <label class="al-label">Notes</label>
+          <textarea class="al-input" id="al-notes" rows="2" placeholder="Any context or notes…" style="resize:vertical;"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="al-foot">
+      <button class="al-cancel" onclick="closeAddLeadModal()">Cancel</button>
+      <button class="al-save" onclick="saveAddLead()">Save Lead</button>
     </div>
   </div>
 </div>

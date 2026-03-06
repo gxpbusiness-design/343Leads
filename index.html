@@ -963,7 +963,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 .main{position:relative;}
 .board-topbar{
   display:flex;align-items:center;gap:12px;
-  padding:14px 0 14px;flex-shrink:0;border-bottom:1px solid var(--border);margin-bottom:0;
+  padding:14px 26px;flex-shrink:0;border-bottom:1px solid var(--border);margin-bottom:0;
 }
 .board-back{
   display:flex;align-items:center;gap:7px;
@@ -1112,6 +1112,30 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
   box-shadow:0 0 0 3px rgba(var(--c1-rgb),.15),0 8px 28px var(--shadow);
 }
 /* chess-piece style top cap */
+.smap-node-add-sibling{
+  position:absolute;
+  right:-36px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border-radius:50%;
+  background:var(--surf2);border:1px dashed rgba(var(--c1-rgb),.4);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;opacity:0;transition:opacity .15s,background .13s;
+  z-index:10;font-size:16px;color:var(--c1);line-height:1;
+}
+.smap-node:hover .smap-node-add-sibling{opacity:1;}
+.smap-node-add-sibling:hover{background:var(--c1-d);border-style:solid;}
+.smap-node-sibling-tag{
+  position:absolute;
+  top:-9px;left:50%;transform:translateX(-50%);
+  font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--c1);background:var(--c1-d);border:1px solid rgba(var(--c1-rgb),.25);
+  padding:1px 5px;border-radius:4px;white-space:nowrap;pointer-events:none;
+}
+.smap-connector-sibling{
+  stroke:rgba(var(--c1-rgb),.3);stroke-width:1.5;fill:none;
+  stroke-dasharray:5,4;
+}
+.smap-connector-sibling.done{stroke:rgba(var(--c1-rgb),.6);stroke-dasharray:none;}
+
 .smap-node-cap{
   height:6px;border-radius:4px 4px 0 0;
   margin:-1.5px -1.5px 0;width:calc(100% + 3px);
@@ -1438,6 +1462,47 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 }
 .pb-vt-btn.on{background:var(--surf4);color:var(--text);}
 .pb-list-view{display:flex;flex-direction:column;gap:2px;}
+.pb-card-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+  margin-top:4px;
+}
+.pb-card{
+  background:var(--surf);border:1px solid var(--border);
+  border-radius:18px;
+  aspect-ratio:4/5;
+  padding:16px 14px 14px;
+  cursor:pointer;transition:all .18s;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;
+  gap:7px;
+  position:relative;
+  text-align:center;
+  overflow:hidden;
+}
+.pb-card:hover{border-color:rgba(var(--c1-rgb),.3);box-shadow:0 6px 24px var(--shadow);transform:translateY(-2px);}
+.pb-card-av{
+  width:52px;height:52px;border-radius:50%;
+  background:var(--c1-d);color:var(--c1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:calc(16px * var(--ts));font-weight:700;letter-spacing:.02em;
+  flex-shrink:0;margin-bottom:2px;
+}
+.pb-card-name{font-size:calc(12.5px * var(--ts));font-weight:600;color:var(--text);line-height:1.2;cursor:pointer;}
+.pb-card-name:hover{color:var(--c1);text-decoration:underline;}
+.pb-card-role{font-size:calc(10px * var(--ts));color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;}
+.pb-card-meta{font-size:calc(9.5px * var(--ts));color:var(--text2);display:flex;flex-direction:column;gap:1px;max-width:100%;overflow:hidden;}
+.pb-card-meta span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pb-card-tag{display:inline-block;padding:2px 7px;border-radius:999px;font-size:calc(9px * var(--ts));font-weight:600;background:var(--c1-d);color:var(--c1);}
+.pb-card-edit-btn{
+  position:absolute;top:9px;right:9px;
+  width:24px;height:24px;border-radius:7px;
+  background:var(--surf3);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .13s;cursor:pointer;
+}
+.pb-card:hover .pb-card-edit-btn{opacity:1;}
 .pb-list-row{
   display:grid;grid-template-columns:38px 1fr auto;align-items:center;
   gap:12px;padding:10px 14px;
@@ -1458,6 +1523,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 
 .stype-integration{background:rgba(158,110,201,.12);color:#9E6EC9;}
 .stype-completed{background:rgba(98,216,152,.12);color:#62D898;}
+.stype-message{background:rgba(56,139,253,.1);color:#3B82F6;}
 
 
 /* ═══ GLOBE CANVAS (Campaigns hero) ═════════════════════ */
@@ -1501,6 +1567,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
   color:var(--text2);cursor:pointer;transition:all .12s;
   display:flex;align-items:center;gap:9px;
 }
+.camp-ctx-item svg{width:15px;height:15px;flex-shrink:0;}
 .camp-ctx-item:hover{background:var(--surf3);color:var(--text);}
 .camp-ctx-item.danger{color:#E07070;}
 .camp-ctx-item.danger:hover{background:rgba(200,70,70,.1);}
@@ -1741,6 +1808,13 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 }
 .wf-add-person-btn:hover{border-color:var(--c1);color:var(--c1);background:var(--c1-d);}
 .wf-comm-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+.wf-tmpl-chip{
+  padding:5px 11px;border-radius:999px;border:1px solid var(--border2);
+  background:var(--surf2);font-size:calc(10.5px * var(--ts));font-weight:500;
+  color:var(--text2);cursor:pointer;transition:all .13s;
+}
+.wf-tmpl-chip:hover{border-color:var(--c1);color:var(--c1);}
+.wf-tmpl-chip.on{background:var(--c1);border-color:var(--c1);color:#fff;}
 .wf-comm-pill{
   padding:4px 10px;border-radius:999px;border:1px solid var(--border2);
   background:var(--surf2);font-size:calc(10px * var(--ts));font-weight:600;cursor:pointer;
@@ -2262,20 +2336,17 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 .mp-save-bar{
   position:fixed;
   bottom:0;
-  left:76px;   /* sidebar width */
+  left:76px;
   right:0;
-  padding:14px 28px;
-  background:linear-gradient(transparent 0%, var(--black) 45%);
+  padding:12px 28px;
+  background:var(--surf);
+  border-top:1px solid var(--border);
   display:flex;gap:10px;justify-content:flex-end;
   z-index:50;
-  pointer-events:none;
 }
-.mp-save-bar button{pointer-events:all;}
-/* Adjust for different sidebar widths */
 .app.bubble-mode .mp-save-bar{left:80px;}
 .app.grid-mode .mp-save-bar{left:74px;}
-/* Add bottom padding to mp-edit so content isn't hidden behind bar */
-.mp-edit{padding-bottom:72px !important;}
+.mp-edit{padding-bottom:64px !important;}
 .mp-save-btn{
   padding:10px 28px;border-radius:10px;
   background:var(--c1);color:#fff;border:none;cursor:pointer;
@@ -2797,6 +2868,40 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 }
 .nep-contact-input:focus{border-color:rgba(var(--c1-rgb),.45);}
 .nep-contact-input::placeholder{color:var(--muted);}
+.nep-contacts-list{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;}
+.nep-contact-chip{
+  display:flex;align-items:center;gap:9px;
+  padding:8px 10px;border-radius:10px;
+  background:var(--surf2);border:1px solid var(--border);
+  transition:border-color .13s;
+}
+.nep-contact-chip:hover{border-color:rgba(var(--c1-rgb),.3);}
+.nep-chip-av{
+  width:30px;height:30px;border-radius:50%;flex-shrink:0;
+  background:var(--c1-d);color:var(--c1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:calc(10px * var(--ts));font-weight:700;letter-spacing:.02em;
+}
+.nep-chip-info{flex:1;min-width:0;}
+.nep-chip-name{font-size:calc(12px * var(--ts));font-weight:600;color:var(--text);}
+.nep-chip-sub{font-size:calc(10px * var(--ts));color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.nep-chip-remove{
+  width:22px;height:22px;border-radius:6px;flex-shrink:0;
+  background:none;border:none;color:var(--muted);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .12s;font-size:14px;line-height:1;
+}
+.nep-chip-remove:hover{background:rgba(220,60,60,.12);color:#E05555;}
+.nep-contacts-add-btn{
+  display:flex;align-items:center;gap:6px;width:100%;
+  padding:8px 12px;border-radius:10px;
+  background:var(--surf2);border:1px dashed var(--border2);
+  color:var(--text2);cursor:pointer;font-size:calc(11.5px * var(--ts));
+  font-family:var(--font-body);font-weight:500;
+  transition:all .15s;
+}
+.nep-contacts-add-btn:hover{background:var(--c1-d);border-color:rgba(var(--c1-rgb),.35);color:var(--c1);}
+.nep-contacts-limit{font-size:calc(10px * var(--ts));color:var(--muted);text-align:right;margin-top:4px;}
 .nep-pb-pick-btn{
   display:flex;align-items:center;gap:7px;
   padding:7px 12px;border-radius:8px;
@@ -2894,6 +2999,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
   /* ── Campaign cards grid ──────────────────────── */
   .games-grid-v2 {
     grid-template-columns: 1fr;
+  }
+  /* ── Phonebook card grid (5→2 col on mobile) ─── */
+  .pb-card-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   /* ── Phone Book toolbar ───────────────────────── */
@@ -3387,8 +3496,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
       <div class="pb-toolbar">
         <div class="sr" style="flex:1"><span class="si-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><input type="text" class="si" id="phonebook-search" oninput="renderPhonebook()"></div>
         <div class="pb-vt">
-          <button class="pb-vt-btn" id="pb-vt-card" onclick="setPbView('card',this)">Cards</button>
-          <button class="pb-vt-btn on" id="pb-vt-list" onclick="setPbView('list',this)">List</button>
+          <button class="pb-vt-btn on" id="pb-vt-card" onclick="setPbView('card',this)">Cards</button>
+          <button class="pb-vt-btn" id="pb-vt-list" onclick="setPbView('list',this)">List</button>
         </div>
       </div>
       <div id="phonebook-list">
@@ -3506,10 +3615,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
       <!-- ── Campaign templates grid ── -->
       <div id="tmpl-campaign-view" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">
         <div class="template-card" onclick="useTemplate('cold-open')">
-          <div class="tc-type">Campaign · 2 steps</div>
-          <div class="tc-name">Cold Open — Mutual Connection</div>
-          <div class="tc-meta">High performer · Great for warm leads</div>
-          <div class="tc-foot"><span class="tc-stat">42% reply rate</span><button class="sb p tc-use">Use</button></div>
+          <div class="tc-type">Campaign · 3 steps · Outreach</div>
+          <div class="tc-name">Cold Open</div>
+          <div class="tc-meta">A new meeting with someone.</div>
+          <div class="tc-foot"><span class="tc-stat">Intro → Meeting → Done</span><button class="sb p tc-use">Use</button></div>
         </div>
         <div class="template-card" onclick="useTemplate('follow-up')">
           <div class="tc-type">Campaign · 2 steps</div>
@@ -3987,20 +4096,20 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 <!-- ════ PHONEBOOK CONTEXT MENU ════ -->
 <div class="camp-ctx" id="pb-ctx">
   <div class="camp-ctx-item" id="pb-ctx-edit" onclick="pbCtxEdit()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
     Edit Contact
   </div>
   <div class="camp-ctx-item" id="pb-ctx-rename" onclick="pbCtxRename()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
     Rename
   </div>
   <div class="camp-ctx-sep"></div>
   <div class="camp-ctx-item danger" id="pb-ctx-remove" onclick="pbCtxRemove()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
     Remove Contact
   </div>
   <div class="camp-ctx-item" id="pb-ctx-save" onclick="pbCtxSaveToPb()" style="display:none;">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
     Save to Phone Book
   </div>
 </div>
@@ -5179,7 +5288,16 @@ function tmplSubmit() {
 
 function useTemplate(type) {
   const templates = {
-    'cold-open':    {steps:[{type:'intro',title:'Cold open — mutual connection angle',status:'pending'},{type:'meeting',title:'Follow-up: 20-min intro call',status:'pending'}]},
+    'cold-open':    {
+      campaignName: 'Cold Open with ',
+      category: 'Outreach',
+      description: 'A new meeting with someone.',
+      steps: [
+        {type:'intro',    title:'Introduction', status:'pending', contacts:[], deadline:'', meetType:'email'},
+        {type:'meeting',  title:'Schedule Meeting', status:'pending', contacts:[], deadline:''},
+        {type:'completed',title:'Done', status:'pending', contacts:[], deadline:''},
+      ]
+    },
     'follow-up':    {steps:[{type:'move',title:'Check-in after 30 days',status:'pending'},{type:'meeting',title:'Short reconnect call',status:'pending'}]},
     'partnership':  {steps:[{type:'intro',title:'Partnership pitch email',status:'pending'},{type:'collab',title:'Send one-pager',status:'pending'},{type:'meeting',title:'Discovery call',status:'pending'}]},
     'intro-meeting':{steps:[{type:'intro',title:'Short intro request',status:'pending'},{type:'meeting',title:'20-min virtual meet',status:'pending'}]},
@@ -5268,11 +5386,11 @@ function renderWiz() {
 
   /* ── STEP 4: Steps ── */
   else if (key === 'steps') {
-    const typeMap = {intro:'stype-intro',collab:'stype-collab',meeting:'stype-meeting',task:'stype-move',integration:'stype-integration',completed:'stype-completed'};
+    const typeMap = {intro:'stype-intro',collab:'stype-collab',meeting:'stype-meeting',task:'stype-move',integration:'stype-integration',completed:'stype-completed',message:'stype-message'};
     const typeLbl = {intro:'Intro',collab:'Collab',meeting:'Meeting',task:'Task',integration:'Integration',completed:'Done'};
     const meetTypes = {call:' Call',email:' Email',inperson:' In Person',zoom:' Zoom',gmeet:' Meet'};
     // Types that support people + meeting-type config
-    const configTypes = ['intro','meeting','task','integration','collab'];
+    const configTypes = ['intro','meeting','task','integration','collab','message'];
     body.innerHTML = `
       <div class="wf-steps-list" id="wf-steps-list">
         ${(wizData.steps||[]).map((s,i)=>{
@@ -5299,6 +5417,7 @@ function renderWiz() {
         <button class="wf-add-btn" onclick="wizAddStep('collab')">+ Collab</button>
         <button class="wf-add-btn" onclick="wizAddStep('task')">+ Task</button>
         <button class="wf-add-btn" onclick="wizAddStep('integration')">+ Integration</button>
+        <button class="wf-add-btn" onclick="wizAddStep('message')">+ Message</button>
         <button class="wf-add-btn" onclick="wizAddStep('completed')">+ Done</button>
       </div>`;
   }
@@ -5365,9 +5484,17 @@ function renderPersonCard(p, i) {
         <div class="wf-comm-pills">
           ${comms.map(c=>`<div class="wf-comm-pill${p.comm===c?' on':''}" onclick="wizSetComm(${i},'${c}',this)">${c.charAt(0).toUpperCase()+c.slice(1)}</div>`).join('')}
         </div>
+        <div class="wf-email-tmpl-row" id="wf-email-tmpl-${i}" style="${p.comm==='email'?'':'display:none;'}margin-top:10px;">
+          <div style="font-size:calc(9px * var(--ts));font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Message Template <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></div>
+          <div class="wf-tmpl-chips" id="wf-tmpl-chips-${i}" style="display:flex;flex-wrap:wrap;gap:6px;">
+            <div class="wf-tmpl-chip" data-type="intro-person" onclick="wizSetTmpl(${i},'intro-person',this)">Introduction</div>
+            <div class="wf-tmpl-chip" data-type="meeting-request" onclick="wizSetTmpl(${i},'meeting-request',this)">Meeting Request</div>
+            <div class="wf-tmpl-chip" data-type="tap-in" onclick="wizSetTmpl(${i},'tap-in',this)">Tap In</div>
+            <div class="wf-tmpl-chip" data-type="application" onclick="wizSetTmpl(${i},'application',this)">Application</div>
+          </div>
+        </div>
       </div>
-    </div>`;
-}
+    </div>`}
 
 function escHtml(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -5381,6 +5508,12 @@ function wizSyncPerson(i, field, val) {
   if (field === 'name') {
     const av = document.getElementById('wf-pav-'+i);
     if (av) av.textContent = val ? initials(val) : String(i+1);
+    // Auto-update campaign name for Cold Open template
+    if (i === 0 && wizData._autoNameFromPerson1) {
+      wizData.campaignName = 'Cold Open with ' + val;
+      const campInput = document.getElementById('wf-camp-name');
+      if (campInput) campInput.value = wizData.campaignName;
+    }
   }
 }
 
@@ -5474,12 +5607,38 @@ function wizPbRenderList() {
 }
 
 function wizPbToggle(realIdx) {
+  // NEP or SCFG multi-select mode — just toggle selection, Done button commits
+  if (_nepPickMode || _scfgPickMode) {
+    if (_wizPbSelected.has(realIdx)) {
+      _wizPbSelected.delete(realIdx);
+    } else {
+      // Enforce max 10 total (existing + newly selected)
+      const totalAfter = (_scfgPickMode ? _scfgContacts.length : _nepContacts.length) + _wizPbSelected.size + 1;
+      if (totalAfter > 10) {
+        showSaveToast('Maximum 10 contacts per step');
+        return;
+      }
+      _wizPbSelected.add(realIdx);
+    }
+    const c   = _wizPbContacts[realIdx];
+    const sel = _wizPbSelected.has(realIdx);
+    const item = document.getElementById('wiz-pb-item-'+realIdx);
+    if (item) {
+      item.className = 'wiz-pb-item' + (sel ? ' selected' : '');
+      const av = item.querySelector('.wiz-pb-av');
+      if (av) { av.style.background = sel ? 'var(--c1)' : 'var(--c1-d)'; av.style.color = sel ? '#fff' : 'var(--c1)'; }
+      const chk = item.querySelector('.wiz-pb-check');
+      if (chk) chk.innerHTML = sel ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>' : '';
+    }
+    wizPbUpdateCount();
+    return;
+  }
+  // Normal multi-select mode
   if (_wizPbSelected.has(realIdx)) {
     _wizPbSelected.delete(realIdx);
   } else {
     _wizPbSelected.add(realIdx);
   }
-  // Just re-render the single item for performance
   const c   = _wizPbContacts[realIdx];
   const sel = _wizPbSelected.has(realIdx);
   const item = document.getElementById('wiz-pb-item-'+realIdx);
@@ -5503,9 +5662,43 @@ function wizPbUpdateCount() {
 }
 
 function wizPbDone() {
+  // NEP multi-select mode — commit selected contacts and close
+  if (_nepPickMode) {
+    _wizPbSelected.forEach(idx => {
+      const c = _wizPbContacts[idx];
+      if (c && _nepContacts.length < 10) {
+        _nepContacts.push({name:c.name||'',role:c.role||'',company:c.company||c.dept||'',email:c.email||'',phone:c.phone||''});
+      }
+    });
+    nepRenderContacts();
+    wizPbClose(); _nepPickMode = false;
+    const title = document.querySelector('#wiz-pb-overlay .wiz-pb-title');
+    if (title) title.textContent = 'Add from Phone Book';
+    const doneBtn = document.getElementById('wiz-pb-done-btn');
+    if (doneBtn) doneBtn.textContent = 'Done';
+    if (_wizPbSelected.size > 0)
+      showSaveToast('Added ' + _wizPbSelected.size + ' contact' + (_wizPbSelected.size!==1?'s':''));
+    return;
+  }
+  // SCFG (wizard step config) multi-select mode
+  if (_scfgPickMode) {
+    _wizPbSelected.forEach(idx => {
+      const c = _wizPbContacts[idx];
+      if (c && _scfgContacts.length < 10)
+        _scfgContacts.push({name:c.name||'',role:c.role||'',company:c.company||c.dept||'',email:c.email||'',phone:c.phone||''});
+    });
+    scfgRenderContacts();
+    wizPbClose(); _scfgPickMode = false;
+    const title = document.querySelector('#wiz-pb-overlay .wiz-pb-title');
+    if (title) title.textContent = 'Add from Phone Book';
+    const doneBtn = document.getElementById('wiz-pb-done-btn');
+    if (doneBtn) doneBtn.textContent = 'Done';
+    if (_wizPbSelected.size > 0)
+      showSaveToast('Added ' + _wizPbSelected.size + ' contact' + (_wizPbSelected.size!==1?'s':''));
+    return;
+  }
   if (!_wizPbSelected.size) { wizPbClose(); return; }
   if (!wizData.people) wizData.people = [];
-  // Remove lone blank placeholder
   if (wizData.people.length === 1 && !wizData.people[0].name) wizData.people = [];
 
   _wizPbSelected.forEach(idx => {
@@ -5532,6 +5725,29 @@ function wizSetComm(i, val, el) {
   wizData.people[i].comm = val;
   el.closest('.wf-comm-pills').querySelectorAll('.wf-comm-pill').forEach(p=>p.classList.remove('on'));
   el.classList.add('on');
+  // Show/hide email template row
+  const tmplRow = document.getElementById('wf-email-tmpl-'+i);
+  if (tmplRow) tmplRow.style.display = val === 'email' ? '' : 'none';
+}
+
+function wizSetTmpl(i, type, el) {
+  if (!wizData.people[i]) return;
+  // Toggle off if already selected
+  if (wizData.people[i].tmplType === type) {
+    wizData.people[i].tmplType = '';
+    el.closest('.wf-tmpl-chips').querySelectorAll('.wf-tmpl-chip').forEach(c=>c.classList.remove('on'));
+    return;
+  }
+  wizData.people[i].tmplType = type;
+  el.closest('.wf-tmpl-chips').querySelectorAll('.wf-tmpl-chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  // If a real template type, open the template modal pre-filled with person's name
+  if (type && type !== 'none') {
+    closeTmplModal && closeTmplModal(); // ensure clean state
+    // Store which person we are templating for
+    _wizTmplPersonIdx = i;
+    openTmplModal(type);
+  }
 }
 
 function wizAddPerson() {
@@ -5582,16 +5798,24 @@ function wizSave() {
   }
   if (key === 'people') {
     wizSavePeopleFields();
+    // Auto-complete campaign name if it ends with trailing space (template placeholder)
+    const cn = (wizData.campaignName || '');
+    if (cn.endsWith(' ') || cn === '') {
+      const p1name = (wizData.people || [])[0]?.name?.trim();
+      if (p1name) {
+        wizData.campaignName = cn.trimEnd() + ' ' + p1name;
+      }
+    }
   }
 }
 
 function wizAddStep(type) {
-  const lbls = {intro:'Introduction',collab:'Collaboration',meeting:'Meeting',task:'General Task',integration:'Integration',completed:'Completed'};
+  const lbls = {intro:'Introduction',collab:'Collaboration',meeting:'Meeting',task:'General Task',integration:'Integration',completed:'Completed',message:'Message'};
   if (!wizData.steps) wizData.steps=[];
   const stepId = 's'+Math.random().toString(36).slice(2);
-  wizData.steps.push({type, title:lbls[type]||type, status:'pending', id:stepId, people:[], meetType:type==='meeting'?'call':'', url:'', deadline:''});
+  wizData.steps.push({type, title:lbls[type]||type, status:'pending', id:stepId, people:[], meetType:type==='meeting'?'call':type==='message'?'email':'', url:'', deadline:''});
   // Open config modal for types that benefit from it
-  const configTypes = ['intro','meeting','task','integration','collab'];
+  const configTypes = ['intro','meeting','task','integration','collab','message'];
   if (configTypes.includes(type)) {
     renderWiz(); // render list first so step exists
     wizConfigStep(wizData.steps.length - 1);
@@ -5603,9 +5827,12 @@ function wizAddStep(type) {
 function wizConfigStep(idx) {
   const s = wizData.steps[idx];
   if (!s) return;
-  const typeMap = {intro:'stype-intro',collab:'stype-collab',meeting:'stype-meeting',task:'stype-move',integration:'stype-integration',completed:'stype-completed'};
+  // Seed scfg contacts from step data
+  _scfgStepIdx = idx;
+  _scfgContacts = (s.contacts||[]).map(c=>({...c}));
+  const typeMap = {intro:'stype-intro',collab:'stype-collab',meeting:'stype-meeting',task:'stype-move',integration:'stype-integration',completed:'stype-completed',message:'stype-message'};
   const typeLbl = {intro:'Intro',collab:'Collab',meeting:'Meeting',task:'Task',integration:'Integration',completed:'Done'};
-  const hasMeetType = ['meeting','intro','collab','integration'].includes(s.type);
+  const hasMeetType = ['meeting','intro','collab','integration','message'].includes(s.type);
   const meetTypeOpts = [
     {val:'call',    label:' Call'},
     {val:'email',   label:' Email'},
@@ -5644,16 +5871,38 @@ function wizConfigStep(idx) {
       <label class="wf-label">Meeting type</label>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;" id="scfg-meettype-row">
         ${meetTypeOpts.map(o => `
-          <button class="nep-type-btn${s.meetType===o.val?' on':''}" onclick="this.closest('#scfg-meettype-row').querySelectorAll('.nep-type-btn').forEach(b=>b.classList.remove('on'));this.classList.add('on');" data-mt="${o.val}">
+          <button class="nep-type-btn${s.meetType===o.val?' on':''}" onclick="scfgToggleMeetType(this);" data-mt="${o.val}">
             ${o.label}
           </button>`).join('')}
       </div>
-
+      <div id="scfg-email-tmpl-row" style="${(s.meetType||'')==='email'?'':'display:none;'}margin-bottom:14px;">
+        <label class="wf-label" style="margin-bottom:8px;">Message template <span style="font-weight:400;opacity:.55;">(optional)</span></label>
+        <div id="scfg-tmpl-chips" style="display:flex;flex-wrap:wrap;gap:6px;">
+          <div class="wf-tmpl-chip${(s.emailTmpl||'')==='intro-person'?' on':''}" data-type="intro-person" onclick="scfgSetEmailTmpl('intro-person',this)">Introduction</div>
+          <div class="wf-tmpl-chip${(s.emailTmpl||'')==='meeting-request'?' on':''}" data-type="meeting-request" onclick="scfgSetEmailTmpl('meeting-request',this)">Meeting Request</div>
+          <div class="wf-tmpl-chip${(s.emailTmpl||'')==='tap-in'?' on':''}" data-type="tap-in" onclick="scfgSetEmailTmpl('tap-in',this)">Tap In</div>
+          <div class="wf-tmpl-chip${(s.emailTmpl||'')==='application'?' on':''}" data-type="application" onclick="scfgSetEmailTmpl('application',this)">Application</div>
+        </div>
+      </div>
       <label class="wf-label">URL / Link <span style="font-weight:400;opacity:.5;">(optional)</span></label>
       <input class="wf-input" id="scfg-url" value="${escHtml(s.url||'')}" placeholder="https://calendly.com/… or Zoom link" style="margin-bottom:14px;">
       ` : ''}
 
-      <label class="wf-label">Deadline <span style="font-weight:400;opacity:.5;">(optional)</span></label>
+      <label class="wf-label" style="margin-bottom:8px;">
+        Contacts <span style="font-weight:400;opacity:.5;">(up to 10)</span>
+      </label>
+      <div class="nep-contacts-list" id="scfg-contacts-list">
+        ${_scfgContacts.map((c,ci)=>nepContactChipHTML(c,ci).replace(/nepRemoveContact/g,'scfgRemoveContact')).join('')}
+      </div>
+      <button class="nep-contacts-add-btn" id="scfg-contacts-add-btn"
+        onclick="scfgOpenPbPicker(${idx})"
+        style="${(s.contacts||[]).length>=10?'display:none':''}">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Add from Phone Book
+      </button>
+      ${(s.contacts||[]).length>0?`<div class="nep-contacts-limit">${(s.contacts||[]).length}/10</div>`:''}
+
+      <label class="wf-label" style="margin-top:14px;">Date <span style="font-weight:400;opacity:.5;">(optional)</span></label>
       <input class="wf-input" id="scfg-deadline" type="date" value="${escHtml(s.deadline||'')}" style="margin-bottom:14px;">
 
       <label class="wf-label">Notes <span style="font-weight:400;opacity:.5;">(optional)</span></label>
@@ -5668,6 +5917,66 @@ function wizConfigStep(idx) {
   setTimeout(() => document.getElementById('scfg-title')?.focus(), 60);
 }
 
+// scfg contact helpers
+let _scfgContacts = [];
+let _scfgStepIdx = null;
+
+function scfgRenderContacts() {
+  const list = document.getElementById('scfg-contacts-list');
+  const addBtn = document.getElementById('scfg-contacts-add-btn');
+  if (list) list.innerHTML = _scfgContacts.map((c,i) =>
+    nepContactChipHTML(c,i).replace(/nepRemoveContact\(/g,'scfgRemoveContact(')
+  ).join('');
+  if (addBtn) addBtn.style.display = _scfgContacts.length >= 10 ? 'none' : '';
+}
+function scfgRemoveContact(ci) {
+  _scfgContacts.splice(ci, 1);
+  scfgRenderContacts();
+}
+
+function scfgOpenPbPicker(idx) {
+  _scfgStepIdx = idx;
+  const allContacts = [...phonebookContacts];
+  games.forEach(g => { if (g.contact?.name) allContacts.push({...g.contact}); });
+  if (!allContacts.length) { showSaveToast('Your Phone Book is empty — add contacts there first'); return; }
+  const addedNames = new Set(_scfgContacts.map(c=>(c.name||'').toLowerCase()));
+  _wizPbContacts = allContacts.filter(c => !addedNames.has((c.name||'').toLowerCase()));
+  if (!_wizPbContacts.length) { showSaveToast('All contacts are already added'); return; }
+  _wizPbFiltered = [..._wizPbContacts];
+  _wizPbSelected = new Set();
+  _nepPickMode   = false;
+  _scfgPickMode  = true;
+  const search = document.getElementById('wiz-pb-search');
+  if (search) search.value = '';
+  const title = document.querySelector('#wiz-pb-overlay .wiz-pb-title');
+  if (title) title.textContent = 'Add Contacts to Step';
+  const doneBtn = document.getElementById('wiz-pb-done-btn');
+  if (doneBtn) doneBtn.textContent = 'Add Selected';
+  wizPbRenderList();
+  document.getElementById('wiz-pb-overlay').classList.add('open');
+}
+
+let _scfgPickMode = false;
+
+function scfgToggleMeetType(btn) {
+  btn.closest('#scfg-meettype-row').querySelectorAll('.nep-type-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const row = document.getElementById('scfg-email-tmpl-row');
+  if (row) row.style.display = btn.dataset.mt === 'email' ? '' : 'none';
+}
+
+function scfgSetEmailTmpl(type, el) {
+  const chips = document.getElementById('scfg-tmpl-chips');
+  if (!chips) return;
+  const wasOn = el.classList.contains('on');
+  chips.querySelectorAll('.wf-tmpl-chip').forEach(c=>c.classList.remove('on'));
+  if (!wasOn) {
+    el.classList.add('on');
+    _wizTmplPersonIdx = -1;
+    openTmplModal(type);
+  }
+}
+
 function wizSaveStepConfig(idx) {
   const s = wizData.steps[idx];
   if (!s) return;
@@ -5677,12 +5986,23 @@ function wizSaveStepConfig(idx) {
   const notesEl = document.getElementById('scfg-notes');
   const mtBtn   = document.querySelector('#scfg-meettype-row .nep-type-btn.on');
   const checked = [...document.querySelectorAll('#node-edit-overlay input[type="checkbox"]:checked')].map(el=>el.value);
+  const scfgTmplChip = document.querySelector('#scfg-tmpl-chips .wf-tmpl-chip.on');
+  if (scfgTmplChip) s.emailTmpl = scfgTmplChip.dataset.type;
+  else if (mtBtn && mtBtn.dataset.mt !== 'email') delete s.emailTmpl;
   if (titleEl) s.title    = titleEl.value.trim()||s.title;
   if (urlEl)   s.url      = urlEl.value.trim();
   if (deadEl)  s.deadline = deadEl.value;
   if (notesEl) s.notes    = notesEl.value.trim();
-  if (mtBtn)   s.meetType = mtBtn.dataset.mt;
+  if (mtBtn) {
+    s.meetType = mtBtn.dataset.mt;
+    if (s.meetType !== 'email') delete s.emailTmpl; // clear tmpl if not email
+  }
+  // Save email template choice
+  const activeTmplChip = document.querySelector('#nep-tmpl-chips .wf-tmpl-chip.on');
+  if (activeTmplChip) s.emailTmpl = activeTmplChip.dataset.type;
   s.people = checked;
+  // Save contacts
+  s.contacts = _scfgContacts.filter(c => c.name || c.email);
   closeNodeEdit();
   renderWiz();
 }
@@ -5801,6 +6121,28 @@ function setBoardView(mode) {
   if (mode==='map') renderSitemap();
   else              renderColumnView();
 }
+function addSiblingStep(parentId) {
+  const g = games.find(x => x.id === activeBoardId); if (!g) return;
+  const parent = g.steps.find(s => s.id === parentId); if (!parent) return;
+  // Count existing siblings to determine x offset
+  const existingSiblings = g.steps.filter(s => s.siblingOf === parentId);
+  const offset = (existingSiblings.length + 1) * 210;
+  const newStep = {
+    id: 'step-' + Date.now(),
+    type: parent.type,
+    title: parent.title,
+    status: 'pending',
+    siblingOf: parentId,
+    contacts: [],
+    deadline: '',
+    x: parent.x + offset,
+    y: parent.y,
+  };
+  g.steps.push(newStep);
+  saveAll();
+  renderSitemap();
+}
+
 function addMoveToBoard() {
   const g = games.find(x=>x.id===activeBoardId); if(!g) return;
   const i = g.steps.length;
@@ -5856,6 +6198,7 @@ const typeIcons = {
   task:        `<svg class="smap-node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`,
   integration: `<svg class="smap-node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 012 2v7M11 18H8a2 2 0 01-2-2V9"/></svg>`,
   completed:   `<svg class="smap-node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+  message:     `<svg class="smap-node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>`,
 };
 const typeCaps = {
   intro:       'var(--comp)',
@@ -5864,23 +6207,35 @@ const typeCaps = {
   task:        '#9A9288',
   integration: '#9E6EC9',
   completed:   '#62D898',
+  message:     '#3B82F6',
 };
-const typeLabels = {intro:'Introduction', collab:'Collaboration', meeting:'Meeting', task:'Task', integration:'Integration', completed:'Completed'};
+const typeLabels = {intro:'Introduction', collab:'Collaboration', meeting:'Meeting', task:'Task', integration:'Integration', completed:'Completed', message:'Message'};
 const statusColors2 = {done:'#62D898', active:'var(--c1)', pending:'#484848'};
 
 function autoLayout(steps) {
-  // Two-column zigzag layout referencing board squares
+  // Two-column zigzag layout — skip sibling steps (they're placed relative to their parent)
   const sqSize = 52;
   const nodeW  = 168, nodeH = 92;
-  const cols   = [2, 5]; // column indices (in chess squares)
+  const cols   = [2, 5];
   const startRow = 1;
-  const rowStep  = 3; // rows per node
-  steps.forEach((s, i) => {
+  const rowStep  = 3;
+  const mainSteps = steps.filter(s => !s.siblingOf);
+  mainSteps.forEach((s, i) => {
     if (s.x === undefined || s._autoLayout) {
-      const col = cols[i % 2];
-      const row = startRow + Math.floor(i / 2) * rowStep + (i % 2 === 0 ? 0 : 0);
-      s.x = col * sqSize + (i%2===0 ? 0 : sqSize*0.5);
+      s.x = cols[i % 2] * sqSize + (i%2===0 ? 0 : sqSize*0.5);
       s.y = (startRow + i * rowStep) * sqSize;
+      s._autoLayout = true;
+    }
+  });
+  // Layout sibling steps to the right of their parent
+  steps.filter(s => s.siblingOf).forEach(s => {
+    const parent = steps.find(p => p.id === s.siblingOf);
+    if (parent && (s.x === undefined || s._autoLayout)) {
+      // Find how many siblings this parent already has (excluding self)
+      const existingSiblings = steps.filter(x => x.siblingOf === s.siblingOf && x.id !== s.id && (x.x !== undefined));
+      const offset = (existingSiblings.length + 1) * 210;
+      s.x = parent.x + offset;
+      s.y = parent.y;
       s._autoLayout = true;
     }
   });
@@ -5907,6 +6262,7 @@ function renderSitemap() {
     div.style.top  = s.y + 'px';
     div.innerHTML = `
       <div class="smap-node-num">${i + 1}</div>
+      ${s.siblingOf ? '<div class="smap-node-sibling-tag">grouped</div>' : ''}
       <div class="smap-node-cap" style="background:${capColor};opacity:.55;"></div>
       <div class="smap-node-body">
         <div class="smap-node-type" style="color:${capColor};">
@@ -5919,7 +6275,8 @@ function renderSitemap() {
             <span class="smap-node-status-lbl" style="color:${sdot};">${slbl}</span>
           </div>
         </div>
-      </div>`;
+      </div>
+      <div class="smap-node-add-sibling" onclick="event.stopPropagation();addSiblingStep('${s.id}')" title="Add parallel step">+</div>`;
     div.addEventListener('mousedown', e => startNodeDrag(e, s, div));
     div.addEventListener('contextmenu', e => { e.preventDefault(); showCtx(e, s.id); });
     div.addEventListener('dblclick', e => { e.stopPropagation(); openNodeEdit(s.id); });
@@ -5955,9 +6312,31 @@ function drawConnectors(g, svg) {
   poly2.setAttribute('fill',`rgba(${_cr[0]},${_cr[1]},${_cr[2]},0.75)`);
   mkr2.appendChild(poly2); defs2.appendChild(mkr2); svg.appendChild(defs2);
 
+  // Draw sibling (horizontal) connectors
+  g.steps.filter(s => s.siblingOf).forEach(s => {
+    const parent = g.steps.find(p => p.id === s.siblingOf);
+    if (!parent) return;
+    const ax = parent.x + 168, ay = parent.y + 50;
+    const bx = s.x, by = s.y + 50;
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d', `M${ax},${ay} C${ax+30},${ay} ${bx-30},${by} ${bx},${by}`);
+    path.setAttribute('class','smap-connector-sibling' + (s.status==='done'?' done':''));
+    svg.appendChild(path);
+    // midpoint dot
+    const mx = (ax+bx)/2, my = (ay+by)/2;
+    const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    dot.setAttribute('cx',mx); dot.setAttribute('cy',my); dot.setAttribute('r','3');
+    const _c1r2=hexToRgbArr(getC1());
+    dot.setAttribute('fill',`rgba(${_c1r2[0]},${_c1r2[1]},${_c1r2[2]},0.25)`);
+    svg.appendChild(dot);
+  });
+
   for (let i = 0; i < g.steps.length - 1; i++) {
     const a = g.steps[i], b = g.steps[i + 1];
-    const ax = a.x + 84, ay = a.y + 100;
+    // Skip if either step is a sibling
+    if (a.siblingOf || b.siblingOf) continue;
+    const ax = a.x + 84;
+    const ay = a.y + 100;
     const bx = b.x + 84, by = b.y - 1;
     const midX = (ax + bx) / 2;
     const midY = (ay + by) / 2;
@@ -6563,7 +6942,7 @@ function campCtxDelete() {
 /* ══════════════════════════════════════════
    PHONEBOOK
 ══════════════════════════════════════════ */
-let pbViewMode = 'list';
+let pbViewMode = 'card';
 let phonebookContacts = [];
 
 function setPbView(mode, btn) {
@@ -6648,15 +7027,31 @@ function renderPhonebook() {
       </div>`;
     }).join('')}</div>`;
   } else {
-    el.innerHTML = filtered.map(c => {
+    el.innerHTML = `<div class="pb-card-grid">${filtered.map(c => {
       const ins = (c.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-      return `<div class="cc"
+      const isCamp = c._fromCampaign;
+      const sub = [c.role, c.company].filter(Boolean).join(' · ');
+      return `<div class="pb-card"
+                   onclick="${isCamp ? '' : `openEditLeadModal('${c.id}')`}"
                    oncontextmenu="showPbCtx(event,'${c.id}')">
-        <div class="cc-av">${ins}</div>
-        <div class="cc-info"><div class="cc-name">${c.name}</div><div class="cc-role">${c.role||''}</div></div>
-        <div class="cc-r"><span class="cc-co">${c.campaign||''}</span>${c.leadType?`<span class="bd bg">${c.leadType}</span>`:''}</div>
+        ${!isCamp ? `<div class="pb-card-edit-btn" onclick="event.stopPropagation();openEditLeadModal('${c.id}')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
+        </div>` : ''}
+        <div class="pb-card-av">${escHtml(ins)}</div>
+        <div>
+          <div class="pb-card-name" onclick="event.stopPropagation();${!isCamp?`openEditLeadModal('${c.id}')`:''}">
+          ${escHtml(c.name||'')}
+        </div>
+          ${sub ? `<div class="pb-card-role">${escHtml(sub)}</div>` : ''}
+        </div>
+        <div class="pb-card-meta">
+          ${c.email ? `<span>${escHtml(c.email)}</span>` : ''}
+          ${c.phone ? `<span>${formatPhone(c.phone)}</span>` : ''}
+        </div>
+        ${c.campaign ? `<span class="pb-card-tag">${escHtml(c.campaign)}</span>` : ''}
+        ${c.leadType && !c.campaign ? `<span class="pb-card-tag">${escHtml(c.leadType)}</span>` : ''}
       </div>`;
-    }).join('');
+    }).join('')}</div>`;
   }
 }
 
@@ -7473,6 +7868,9 @@ function loadAll() {
 
   // Re-init APIs
   initApiCards();
+
+  // Re-render data views that are pre-populated from storage
+  renderPhonebook();
 }
 
 // Auto-save every 10 minutes
@@ -8435,10 +8833,10 @@ function openNodeEdit(stepId) {
 
   const types   = ['intro','meeting','collab','task','integration','completed'];
   const statuses= ['pending','in-progress','done'];
-  const typeLabels   = {intro:'Intro',meeting:'Meeting',collab:'Collab',task:'Task',integration:'Integration',completed:'Done'};
+  const typeLabels   = {intro:'Intro',meeting:'Meeting',collab:'Collab',task:'Task',integration:'Integration',completed:'Done',message:'Message'};
   const statusLabels = {pending:'Pending','in-progress':'In Progress',done:'Done'};
-  const typeMap = {intro:'stype-intro',collab:'stype-collab',meeting:'stype-meeting',task:'stype-move',integration:'stype-integration',completed:'stype-completed'};
-  const hasMeetType  = ['meeting','intro','collab','integration'].includes(s.type);
+  const typeMap = {intro:'stype-intro',collab:'stype-collab',meeting:'stype-meeting',task:'stype-move',integration:'stype-integration',completed:'stype-completed',message:'stype-message'};
+  const hasMeetType  = ['meeting','intro','collab','integration','message'].includes(s.type);
   const meetTypeOpts = [
     {val:'call',    label:' Call'},
     {val:'email',   label:' Email'},
@@ -8450,27 +8848,28 @@ function openNodeEdit(stepId) {
   const campaignPeople = (g.people||[]).filter(p=>p.name);
   const selPeople = s.people||[];
 
-  // Contact assigned to this step
-  const sc = s.contact || {};
+  // Contacts assigned to this step (up to 10)
+  // Backward compat: migrate legacy s.contact -> s.contacts
+  if (!s.contacts) {
+    s.contacts = s.contact ? [s.contact] : [];
+    delete s.contact;
+  }
+  _nepContacts = s.contacts.map(c => ({...c}));
 
-  // Build contact section HTML
   const contactSection = `
-    <label class="wf-label" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-      <span>Contact</span>
-      <button class="nep-pb-pick-btn" onclick="nepOpenPbPicker('${stepId}')">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-        From Phone Book
-      </button>
+    <label class="wf-label" style="margin-bottom:8px;">
+      Contacts <span style="color:var(--muted);font-weight:400;">(up to 10)</span>
     </label>
-    <div class="nep-contact-fields" id="nep-contact-fields">
-      <div class="nep-cf-full">
-        <input class="nep-contact-input" id="nep-c-name" placeholder="Full name" value="${escHtml(sc.name||'')}">
-      </div>
-      <input class="nep-contact-input" id="nep-c-role" placeholder="Role / Title" value="${escHtml(sc.role||'')}">
-      <input class="nep-contact-input" id="nep-c-company" placeholder="Company" value="${escHtml(sc.company||'')}">
-      <input class="nep-contact-input" id="nep-c-email" placeholder="Email address" value="${escHtml(sc.email||'')}">
-      <input class="nep-contact-input" id="nep-c-phone" placeholder="Phone number" value="${escHtml(sc.phone||'')}">
-    </div>`;
+    <div class="nep-contacts-list" id="nep-contacts-list">
+      ${_nepContacts.map((c,i) => nepContactChipHTML(c,i)).join('')}
+    </div>
+    <button class="nep-contacts-add-btn" id="nep-contacts-add-btn" onclick="nepOpenPbPicker('${stepId}')" style="${_nepContacts.length>=10?'display:none':''}">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      Add from Phone Book
+    </button>
+    <div class="nep-contacts-limit" style="${_nepContacts.length===0?'display:none':''}">
+      ${_nepContacts.length}/10
+    </div>`
 
   const overlay = document.getElementById('node-edit-overlay');
   overlay.innerHTML = `
@@ -8509,9 +8908,18 @@ function openNodeEdit(stepId) {
       <label class="wf-label">Meeting type</label>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;" id="nep-meettype-row">
         ${meetTypeOpts.map(o => `
-          <button class="nep-type-btn${(s.meetType||'')=== o.val?' on':''}" data-mt="${o.val}" onclick="this.closest('#nep-meettype-row').querySelectorAll('.nep-type-btn').forEach(b=>b.classList.remove('on'));this.classList.add('on');">
+          <button class="nep-type-btn${(s.meetType||'')=== o.val?' on':''}" data-mt="${o.val}" onclick="nepToggleMeetType(this,'${stepId}');">
             ${o.label}
           </button>`).join('')}
+      </div>
+      <div id="nep-email-tmpl-row" style="${(s.meetType||'')==='email'?'':'display:none;'}margin-bottom:14px;">
+        <label class="wf-label" style="margin-bottom:8px;">Message template <span style="font-weight:400;opacity:.55;">(optional)</span></label>
+        <div id="nep-tmpl-chips" style="display:flex;flex-wrap:wrap;gap:6px;">
+          <div class="wf-tmpl-chip${(s.emailTmpl||'')==='intro-person'?' on':''}" data-type="intro-person" onclick="nepSetEmailTmpl('${stepId}','intro-person',this)">Introduction</div>
+          <div class="wf-tmpl-chip${(s.emailTmpl||'')==='meeting-request'?' on':''}" data-type="meeting-request" onclick="nepSetEmailTmpl('${stepId}','meeting-request',this)">Meeting Request</div>
+          <div class="wf-tmpl-chip${(s.emailTmpl||'')==='tap-in'?' on':''}" data-type="tap-in" onclick="nepSetEmailTmpl('${stepId}','tap-in',this)">Tap In</div>
+          <div class="wf-tmpl-chip${(s.emailTmpl||'')==='application'?' on':''}" data-type="application" onclick="nepSetEmailTmpl('${stepId}','application',this)">Application</div>
+        </div>
       </div>
       <label class="wf-label">Meeting URL <span style="font-weight:400;opacity:.5;">(optional)</span></label>
       <input class="wf-input" id="nep-url-input" value="${escHtml(s.url||'')}" placeholder="https://calendly.com/… or Zoom link" style="margin-bottom:14px;">
@@ -8535,12 +8943,70 @@ function openNodeEdit(stepId) {
 /* ── Phone Book picker for step contact ───────────────────── */
 let _nepPickStepId = null;
 
-function nepOpenPbPicker(stepId) {
-  _nepPickStepId = stepId;
+let _nepContacts = [];   // contacts currently in the step being edited
+let _wizTmplPersonIdx = -1; // which wizard person is getting a message template
+let _nepStepIdForPick = null;
 
-  // Build full contact list (phonebook + campaign contacts)
-  const allContacts = [];
-  phonebookContacts.forEach(c => allContacts.push(c));
+function nepToggleMeetType(btn, stepId) {
+  btn.closest('#nep-meettype-row').querySelectorAll('.nep-type-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const row = document.getElementById('nep-email-tmpl-row');
+  if (row) row.style.display = btn.dataset.mt === 'email' ? '' : 'none';
+}
+
+function nepSetEmailTmpl(stepId, type, el) {
+  // Toggle off if already selected
+  const chips = document.getElementById('nep-tmpl-chips');
+  if (!chips) return;
+  const wasOn = el.classList.contains('on');
+  chips.querySelectorAll('.wf-tmpl-chip').forEach(c=>c.classList.remove('on'));
+  if (!wasOn) {
+    el.classList.add('on');
+    if (type && type !== 'none') {
+      // Pre-fill recipient name from first contact if available
+      _wizTmplPersonIdx = -1;
+      _nepTmplStepId = stepId;
+      openTmplModal(type);
+    }
+  }
+}
+
+let _nepTmplStepId = null; // which step is getting an email template
+
+function nepContactChipHTML(c, i) {
+  const ins = (c.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const sub = [c.role, c.company].filter(Boolean).join(' · ');
+  return `<div class="nep-contact-chip" id="nep-chip-${i}">
+    <div class="nep-chip-av">${escHtml(ins)}</div>
+    <div class="nep-chip-info">
+      <div class="nep-chip-name">${escHtml(c.name||'')}</div>
+      ${sub?`<div class="nep-chip-sub">${escHtml(sub)}</div>`:''}
+    </div>
+    <button class="nep-chip-remove" onclick="nepRemoveContact(${i})" title="Remove">×</button>
+  </div>`;
+}
+
+function nepRenderContacts() {
+  const list = document.getElementById('nep-contacts-list');
+  const addBtn = document.getElementById('nep-contacts-add-btn');
+  const limitEl = document.getElementById('nep-contacts-limit');
+  if (list) list.innerHTML = _nepContacts.map((c,i) => nepContactChipHTML(c,i)).join('');
+  if (addBtn) addBtn.style.display = _nepContacts.length >= 10 ? 'none' : '';
+  if (limitEl) {
+    limitEl.style.display = _nepContacts.length === 0 ? 'none' : '';
+    limitEl.textContent = _nepContacts.length + '/10';
+  }
+}
+
+function nepRemoveContact(i) {
+  _nepContacts.splice(i, 1);
+  nepRenderContacts();
+}
+
+function nepOpenPbPicker(stepId) {
+  _nepStepIdForPick = stepId;
+
+  const allContacts = [...phonebookContacts];
   games.forEach(g => { if (g.contact?.name) allContacts.push({...g.contact}); });
 
   if (!allContacts.length) {
@@ -8548,76 +9014,35 @@ function nepOpenPbPicker(stepId) {
     return;
   }
 
-  // Reuse wiz-pb-overlay but set a special mode flag
-  _wizPbContacts  = allContacts;
-  _wizPbFiltered  = [...allContacts];
-  _wizPbSelected  = new Set();
-  _nepPickMode    = true;   // single-select autofill mode
+  // Filter out already-added contacts
+  const addedNames = new Set(_nepContacts.map(c=>(c.name||'').toLowerCase()));
+  _wizPbContacts = allContacts.filter(c => !addedNames.has((c.name||'').toLowerCase()));
+
+  if (!_wizPbContacts.length) {
+    showSaveToast('All contacts are already added');
+    return;
+  }
+
+  _wizPbFiltered = [..._wizPbContacts];
+  _wizPbSelected = new Set();
+  _nepPickMode   = true;   // multi-select NEP mode
 
   const search = document.getElementById('wiz-pb-search');
   if (search) search.value = '';
 
-  // Update modal title and button for single-select mode
   const title = document.querySelector('#wiz-pb-overlay .wiz-pb-title');
-  if (title) title.textContent = 'Pick a Contact';
+  if (title) title.textContent = 'Add Contacts';
   const doneBtn = document.getElementById('wiz-pb-done-btn');
-  if (doneBtn) doneBtn.textContent = 'Select';
+  if (doneBtn) doneBtn.textContent = 'Add Selected';
 
   wizPbRenderList();
   document.getElementById('wiz-pb-overlay').classList.add('open');
 }
 
-// Patch wizPbToggle so single-select mode auto-closes on pick
-const _origWizPbToggle = wizPbToggle;
-function wizPbToggle(realIdx) {
-  if (_nepPickMode) {
-    // Single-select: pick and autofill immediately
-    const c = _wizPbContacts[realIdx];
-    if (c) nepAutofillContact(c);
-    wizPbClose();
-    _nepPickMode = false;
-    // Restore modal title
-    const title = document.querySelector('#wiz-pb-overlay .wiz-pb-title');
-    if (title) title.textContent = 'Add from Phone Book';
-    const doneBtn = document.getElementById('wiz-pb-done-btn');
-    if (doneBtn) doneBtn.textContent = 'Done';
-    return;
-  }
-  _origWizPbToggle(realIdx);
-}
-
-// Patch wizPbDone — in nep mode just close
-const _origWizPbDone = wizPbDone;
-function wizPbDone() {
-  if (_nepPickMode) {
-    wizPbClose();
-    _nepPickMode = false;
-    return;
-  }
-  _origWizPbDone();
-}
-
+// _nepPickMode declared below
 let _nepPickMode = false;
 
-function nepAutofillContact(c) {
-  const set = (id, val) => {
-    const el = document.getElementById(id);
-    if (el) el.value = val || '';
-  };
-  set('nep-c-name',    c.name);
-  set('nep-c-role',    c.role);
-  set('nep-c-company', c.company || c.dept);
-  set('nep-c-email',   c.email);
-  set('nep-c-phone',   c.phone);
-  // Briefly flash the fields to show autofill happened
-  const fields = document.getElementById('nep-contact-fields');
-  if (fields) {
-    fields.style.transition = 'background .15s';
-    fields.style.background = 'rgba(var(--c1-rgb),.08)';
-    setTimeout(() => { fields.style.background = ''; }, 600);
-  }
-  showSaveToast(`Filled in ${c.name}`);
-}
+// nepAutofillContact removed — see _nepPickMode in wizPbToggle/Done
 
 function closeNodeEdit() {
   const overlay = document.getElementById('node-edit-overlay');
@@ -8697,17 +9122,13 @@ function nepSave(stepId) {
     if (deadEl)  s.deadline = deadEl.value;
     if (mtBtn)   s.meetType = mtBtn.dataset.mt;
     if (checked.length) s.people = checked;
-    // Save contact fields
-    const cName    = document.getElementById('nep-c-name')?.value.trim()    || '';
-    const cRole    = document.getElementById('nep-c-role')?.value.trim()    || '';
-    const cCompany = document.getElementById('nep-c-company')?.value.trim() || '';
-    const cEmail   = document.getElementById('nep-c-email')?.value.trim()   || '';
-    const cPhone   = document.getElementById('nep-c-phone')?.value.trim()   || '';
-    if (cName || cEmail || cPhone) {
-      s.contact = { name:cName, role:cRole, company:cCompany, email:cEmail, phone:cPhone };
+    // Save multi-contacts array
+    if (_nepContacts.length > 0) {
+      s.contacts = _nepContacts.filter(c => c.name || c.email || c.phone);
     } else {
-      delete s.contact;
+      delete s.contacts;
     }
+    delete s.contact; // clear legacy field
   }
   closeNodeEdit();
   setBoardView(boardViewMode);

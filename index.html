@@ -1312,7 +1312,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 
 /* ═══ NODE EDIT PANEL (double-click to expand) ════════ */
 .node-edit-overlay{
-  position:fixed;inset:0;z-index:400;
+  position:fixed;inset:0;z-index:600;
   background:rgba(0,0,0,.4);backdrop-filter:blur(6px);
   opacity:0;pointer-events:none;transition:opacity .2s;
   display:flex;align-items:center;justify-content:center;
@@ -2672,77 +2672,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 .dup-apply:hover{background:var(--c1-l);}
 
 
-/* ══ PHONEBOOK MULTI-SELECT ═══════════════════════════════ */
-.pb-list-row{
-  position:relative;
-  user-select:none;
-}
-.pb-list-row.pb-selected{
-  background:var(--c1-d2) !important;
-  border-color:rgba(var(--c1-rgb),.35) !important;
-}
-/* Checkbox circle */
-.pb-check{
-  width:20px;height:20px;border-radius:50%;flex-shrink:0;
-  border:2px solid var(--border2);background:var(--surf);
-  display:flex;align-items:center;justify-content:center;
-  transition:all .13s;cursor:pointer;
-  opacity:0;pointer-events:none;
-}
-.pb-select-mode .pb-check{opacity:1;pointer-events:all;}
-.pb-select-mode .pb-list-row:hover .pb-check{border-color:var(--c1);}
-.pb-list-row.pb-selected .pb-check{
-  background:var(--c1);border-color:var(--c1);opacity:1;
-}
-.pb-list-row.pb-selected .pb-check svg{display:block;}
-.pb-check svg{display:none;width:11px;height:11px;}
-
-/* Selection action bar — slides up from bottom */
-.pb-select-bar{
-  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
-  background:var(--surf4);border:1px solid var(--border3);border-radius:14px;
-  padding:10px 16px;display:flex;align-items:center;gap:12px;
-  box-shadow:0 8px 32px rgba(0,0,0,.4);z-index:900;
-  transition:transform .22s cubic-bezier(.34,1.36,.64,1);
-  white-space:nowrap;
-}
-.pb-select-bar.visible{transform:translateX(-50%) translateY(0);}
-.pb-select-count{
-  font-size:calc(12px * var(--ts));font-weight:700;color:var(--text);
-  padding-right:12px;border-right:1px solid var(--border2);min-width:80px;
-}
-.pb-select-action{
-  display:flex;align-items:center;gap:6px;padding:7px 14px;
-  border-radius:9px;border:1px solid var(--border2);background:var(--surf3);
-  cursor:pointer;font-size:calc(11.5px * var(--ts));font-weight:600;
-  color:var(--text2);transition:all .13s;
-}
-.pb-select-action:hover{border-color:var(--border3);color:var(--text);}
-.pb-select-action.danger{color:#E07070;}
-.pb-select-action.danger:hover{background:rgba(200,70,70,.12);border-color:rgba(200,70,70,.4);}
-.pb-select-action svg{width:13px;height:13px;flex-shrink:0;}
-.pb-select-sep{width:1px;height:20px;background:var(--border2);}
-.pb-select-all-btn{
-  font-size:calc(11px * var(--ts));font-weight:600;color:var(--c1);
-  cursor:pointer;padding:4px 6px;border-radius:6px;
-  background:transparent;border:none;
-}
-.pb-select-all-btn:hover{background:var(--c1-d);}
-
-/* Select mode button in toolbar */
-.pb-sel-toggle{
-  display:flex;align-items:center;gap:5px;padding:5px 11px;
-  border-radius:8px;border:1px solid var(--border2);background:var(--surf2);
-  cursor:pointer;font-size:calc(10.5px * var(--ts));font-weight:600;
-  color:var(--muted);transition:all .13s;white-space:nowrap;
-}
-.pb-sel-toggle:hover{color:var(--text);border-color:var(--border3);}
-.pb-sel-toggle.active{background:var(--c1-d2);color:var(--c1);border-color:rgba(var(--c1-rgb),.35);}
-.pb-sel-toggle svg{width:13px;height:13px;}
-
-
-
-
 </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -2896,15 +2825,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
     <!-- ═══════ THE PLAYER ═══════ -->
     <div class="tab" id="tab-player">
 
-      <!-- ══ PROFILE VIEW (shown when profile has data) ══ -->
-      <div class="mp-view" id="mp-view">
-        <!-- populated by mpRenderView() -->
-      </div>
-
-      <!-- ══ PROFILE EDIT (form) ══ -->
-      <div class="mp-edit">
-
-      <!-- Hero (edit mode header) -->
+      <!-- Hero -->
       <div class="mp-hero">
         <div class="mp-hero-bg"></div>
         <div class="mp-avatar-wrap">
@@ -2922,8 +2843,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
           <div style="font-size:calc(11px * var(--ts));color:var(--muted);margin-top:6px;" id="mp-role-display"></div>
         </div>
         <div class="mp-hero-actions">
-          <button class="sb" onclick="mpCancelEdit()">Cancel</button>
-          <button class="sb p" onclick="mpSave()" style="margin-left:6px;">Save Profile</button>
+          <button class="sb p" onclick="mpSave()">Save Profile</button>
         </div>
       </div>
 
@@ -2939,7 +2859,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
           </div>
           <div class="mp-field">
             <label class="mp-label">Title / Role</label>
-            <input class="mp-input" id="mp-role" placeholder="e.g. Creative Director, Founder..." oninput="mpLiveUpdate()">
+            <input class="mp-input" id="mp-role" placeholder="e.g. Creative Director, Founder...">
           </div>
         </div>
         <div class="mp-field" style="margin-bottom:12px;">
@@ -2955,8 +2875,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
             <label class="mp-label">Gender</label>
             <select class="mp-select" id="mp-gender">
               <option value="">Prefer not to say</option>
-              <option>Man</option><option>Woman</option><option>Non-binary</option>
-              <option>Genderfluid</option><option>Agender</option><option>Other</option>
+              <option>Man</option>
+              <option>Woman</option>
+              <option>Non-binary</option>
+              <option>Genderfluid</option>
+              <option>Agender</option>
+              <option>Other</option>
             </select>
           </div>
           <div class="mp-field">
@@ -2979,7 +2903,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 
       <!-- Social Links -->
       <div class="mp-section">
-        <div class="mp-section-head"><div class="mp-section-title">Links</div></div>
+        <div class="mp-section-head">
+          <div class="mp-section-title">Links</div>
+        </div>
         <div class="mp-links-grid">
           <div class="mp-link-row">
             <div class="mp-link-ico" style="background:rgba(255,0,0,.1);color:#FF4444;">
@@ -3028,7 +2954,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 
       <!-- Resumes & Documents -->
       <div class="mp-section">
-        <div class="mp-section-head"><div class="mp-section-title">Resumes &amp; Documents</div></div>
+        <div class="mp-section-head">
+          <div class="mp-section-title">Resumes &amp; Documents</div>
+        </div>
         <div id="mp-docs-list"></div>
         <label class="mp-upload-btn">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -3039,7 +2967,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 
       <!-- Key Contacts -->
       <div class="mp-section">
-        <div class="mp-section-head"><div class="mp-section-title">Key Contacts</div></div>
+        <div class="mp-section-head">
+          <div class="mp-section-title">Key Contacts</div>
+        </div>
         <div style="padding:20px;text-align:center;background:var(--surf2);border:1px solid var(--border2);border-radius:var(--card-r);">
           <div style="font-size:calc(12px * var(--ts));color:var(--text2);margin-bottom:12px;">Your key contacts live in your Phone Book.</div>
           <button class="sb p" onclick="go('phonebook')">Go to Phone Book</button>
@@ -3047,11 +2977,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
       </div>
 
       <div class="mp-save-bar">
-        <button class="sb" onclick="mpCancelEdit()">Cancel</button>
+        <button class="sb" onclick="mpDiscard()">Discard</button>
         <button class="mp-save-btn" onclick="mpSave()">Save Profile</button>
       </div>
-
-      </div><!-- /mp-edit -->
 
     </div>
 
@@ -3095,33 +3023,13 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
       <canvas class="grid-lines-canvas" id="pb-grid-canvas"></canvas>
       <div class="sec-head mb14"><h2>Phone Book</h2><span class="eyebrow" id="phonebook-count">0 Leads</span><div style="flex:1"></div>
         <label class="sb" style="cursor:pointer;">Import<input type="file" accept=".csv,.json" style="display:none" onchange="importPhonebook(event)"></label>
-        <button class="sb p" style="margin-left:6px;" onclick="openAddLeadModal()">+ Add Lead</button>
+        <button class="sb p" style="margin-left:6px;">+ Add Lead</button>
       </div>
       <div class="pb-toolbar">
         <div class="sr" style="flex:1"><span class="si-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><input type="text" class="si" id="phonebook-search" oninput="renderPhonebook()"></div>
-        <button class="pb-sel-toggle" id="pb-sel-toggle" onclick="pbToggleSelectMode()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="4" height="4" rx="1"/><rect x="3" y="11" width="4" height="4" rx="1"/><rect x="3" y="17" width="4" height="4" rx="1"/><line x1="10" y1="7" x2="21" y2="7"/><line x1="10" y1="13" x2="21" y2="13"/><line x1="10" y1="19" x2="21" y2="19"/></svg>
-          Select
-        </button>
         <div class="pb-vt">
           <button class="pb-vt-btn" id="pb-vt-card" onclick="setPbView('card',this)">Cards</button>
           <button class="pb-vt-btn on" id="pb-vt-list" onclick="setPbView('list',this)">List</button>
-        </div>
-      </div>
-
-      <!-- floating selection action bar -->
-      <div class="pb-select-bar" id="pb-select-bar">
-        <div class="pb-select-count" id="pb-select-count">0 selected</div>
-        <button class="pb-select-all-btn" onclick="pbSelectAll()">Select All</button>
-        <div class="pb-select-sep"></div>
-        <div class="pb-select-action danger" onclick="pbDeleteSelected()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
-          Delete Selected
-        </div>
-        <div class="pb-select-sep"></div>
-        <div class="pb-select-action" onclick="pbToggleSelectMode()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          Deselect All
         </div>
       </div>
       <div id="phonebook-list">
@@ -3672,27 +3580,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
   </div>
 </div>
 
-<!-- ═══════ PHONEBOOK CONTACT CONTEXT MENU ═══════ -->
-<div class="camp-ctx" id="pb-ctx">
-  <div class="camp-ctx-item" onclick="pbCtxEdit()">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-    Edit Contact
-  </div>
-  <div class="camp-ctx-item" onclick="pbCtxRename()">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
-    Rename
-  </div>
-  <div class="camp-ctx-sep"></div>
-  <div class="camp-ctx-item danger" onclick="pbCtxRemove()">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
-    Remove Contact
-  </div>
-  <div class="camp-ctx-item" id="pb-ctx-save" style="display:none" onclick="pbCtxSaveToPb()">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-    Save to Phone Book
-  </div>
-</div>
-
 <!-- ═══════ NODE EDIT OVERLAY ═══════ -->
 <div class="node-edit-overlay" id="node-edit-overlay" onclick="if(event.target===this)closeNodeEdit()"></div>
 
@@ -3720,85 +3607,49 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 </div>
 
 
-<!-- ═══════ ADD LEAD MODAL ═══════ -->
-
-<!-- ═══════ DUPLICATE IMPORT MODAL ═══════ -->
+<!-- ════ DUPLICATE DETECTION MODAL ════ -->
 <div class="dup-overlay" id="dup-overlay">
   <div class="dup-modal">
     <div class="dup-head">
       <div>
         <div class="dup-title">Duplicate Contacts Found</div>
-        <div class="dup-sub" id="dup-sub"></div>
+        <div class="dup-sub" id="dup-sub">Some contacts already exist in your Phone Book.</div>
       </div>
       <button class="dup-close" onclick="dupCancel()">&#215;</button>
     </div>
     <div class="dup-list" id="dup-list"></div>
     <div class="dup-foot">
       <div class="dup-foot-note" id="dup-foot-note"></div>
-      <button class="dup-apply" onclick="dupApply()">Apply &amp; Import</button>
+      <button class="dup-apply" onclick="dupApply()">Apply</button>
     </div>
   </div>
 </div>
-
-<div class="al-overlay" id="al-overlay" onclick="if(event.target===this)closeAddLeadModal()">
-  <div class="al-modal">
-    <div class="al-head">
-      <div class="al-title" id="al-modal-title">Add Lead</div>
-      <input type="hidden" id="al-contact-id" value="">
-      <button class="al-close" onclick="closeAddLeadModal()">&#215;</button>
-    </div>
-    <div class="al-grid">
-      <div class="al-field">
-        <label class="al-label">Full Name *</label>
-        <input class="al-input" id="al-name" placeholder="Jane Smith" autofocus>
-      </div>
-      <div class="al-field">
-        <label class="al-label">Title / Role</label>
-        <input class="al-input" id="al-role" placeholder="CEO, Producer...">
-      </div>
-      <div class="al-field">
-        <label class="al-label">Email</label>
-        <input class="al-input" id="al-email" type="email" placeholder="jane@company.com">
-      </div>
-      <div class="al-field">
-        <label class="al-label">Phone</label>
-        <input class="al-input" id="al-phone" placeholder="(555) 000-0000" oninput="onPhoneInput(this)">
-      </div>
-      <div class="al-field">
-        <label class="al-label">Company / Org</label>
-        <input class="al-input" id="al-company" placeholder="Acme Corp">
-      </div>
-      <div class="al-field">
-        <label class="al-label">Lead Type</label>
-        <select class="al-select" id="al-type">
-          <option value="">— none —</option>
-          <option>Warm</option>
-          <option>Cold</option>
-          <option>Hot</option>
-          <option>Referral</option>
-          <option>Partner</option>
-          <option>Investor</option>
-          <option>Client</option>
-          <option>Mentor</option>
-        </select>
-      </div>
-      <div class="al-field full">
-        <label class="al-label">Notes</label>
-        <input class="al-input" id="al-notes" placeholder="Any context or tags...">
-      </div>
-    </div>
-    <div class="al-foot">
-      <button class="al-cancel" onclick="closeAddLeadModal()">Cancel</button>
-      <button class="al-save" onclick="saveAddLead()">Add Lead</button>
-    </div>
+<!-- ════ PHONEBOOK CONTEXT MENU ════ -->
+<div class="camp-ctx" id="pb-ctx">
+  <div class="camp-ctx-item" id="pb-ctx-edit" onclick="pbCtxEdit()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
+    Edit Contact
+  </div>
+  <div class="camp-ctx-item" id="pb-ctx-rename" onclick="pbCtxRename()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
+    Rename
+  </div>
+  <div class="camp-ctx-sep"></div>
+  <div class="camp-ctx-item danger" id="pb-ctx-remove" onclick="pbCtxRemove()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+    Remove Contact
+  </div>
+  <div class="camp-ctx-item" id="pb-ctx-save" onclick="pbCtxSaveToPb()" style="display:none;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+    Save to Phone Book
   </div>
 </div>
-
 </div><!-- /app -->
 
-<script>
-'use strict';
 
+
+</body>
+<script>
 /* ══════════════════════════════════════════
    TAB NAVIGATION
 ══════════════════════════════════════════ */
@@ -5181,14 +5032,22 @@ function formatPhone(v) {
 }
 
 function wizImportFromPhonebook() {
-  if (!phonebookContacts || !phonebookContacts.length) {
-    alert('Your Phone Book is empty. Add leads there first!'); return;
+  // Merge campaign contacts + phonebook contacts (same as renderPhonebook)
+  const allContacts = [];
+  games.forEach(g => { if (g.contact?.name) allContacts.push({...g.contact, campaign: g.name}); });
+  phonebookContacts.forEach(c => allContacts.push(c));
+
+  if (!allContacts.length) {
+    showSaveToast('Your Phone Book is empty — add leads there first'); return;
   }
   // Show a quick picker inside the wiz body
   wizSavePeopleFields();
-  const existing = new Set((wizData.people||[]).map(p=>p.email).filter(Boolean));
-  const avail = phonebookContacts.filter(c => !existing.has(c.email));
-  if (!avail.length) { alert('All Phone Book contacts are already added.'); return; }
+  const existingNames  = new Set((wizData.people||[]).map(p=>(p.name||'').toLowerCase()).filter(Boolean));
+  const existingEmails = new Set((wizData.people||[]).map(p=>p.email).filter(Boolean));
+  const avail = allContacts.filter(c =>
+    !existingEmails.has(c.email) && !existingNames.has((c.name||'').toLowerCase())
+  );
+  if (!avail.length) { showSaveToast('All Phone Book contacts are already added'); return; }
 
   const overlay = document.getElementById('node-edit-overlay');
   overlay.innerHTML = `
@@ -6119,7 +5978,6 @@ let globe = { rot:0, tilt:0, velX:0, velY:0, scrollHue:0, raf:null };
 /* ══════════════════════════════════════════
    PHONEBOOK FLOW WAVE (image 2 style)
 ══════════════════════════════════════════ */
-let flowWave = { t:0, raf:null, active:false };
 
 function initPbWave() {
   const bg = document.getElementById('pb-wave-bg');
@@ -6136,7 +5994,11 @@ function initPbWave() {
   }
   resize();
   new ResizeObserver(() => requestAnimationFrame(resize)).observe(bg);
+}
 
+let flowWave = { t:0, raf:null, active:false };
+
+function startPbWave() {
   if (flowWave.active) return;
   flowWave.active = true;
 
@@ -6286,92 +6148,10 @@ function initTorusInteraction() {
 // Global lookup for context menu: id → contact
 let _pbContactMap = {};
 
-/* ══════════════════════════════════════════
-   PHONEBOOK MULTI-SELECT
-══════════════════════════════════════════ */
-let pbSelectMode  = false;
-let pbSelectedIds = new Set();
-
-function pbToggleSelectMode() {
-  pbSelectMode = !pbSelectMode;
-  if (!pbSelectMode) {
-    pbSelectedIds.clear();
-    pbUpdateSelectBar();
-  }
-  const list = document.getElementById('phonebook-list');
-  if (list) list.classList.toggle('pb-select-mode', pbSelectMode);
-  const toggle = document.getElementById('pb-sel-toggle');
-  if (toggle) toggle.classList.toggle('active', pbSelectMode);
-  renderPhonebook();
-}
-
-function pbRowClick(e, id) {
-  if (!pbSelectMode) return;
-  e.preventDefault();
-  pbToggleSelect(id);
-}
-
-function pbToggleSelect(id) {
-  if (pbSelectedIds.has(id)) {
-    pbSelectedIds.delete(id);
-  } else {
-    pbSelectedIds.add(id);
-  }
-  // Update row UI without full re-render
-  const row = document.querySelector(`[data-pbid="${id}"]`);
-  if (row) {
-    row.classList.toggle('pb-selected', pbSelectedIds.has(id));
-    const chk = row.querySelector('.pb-check svg');
-    // CSS handles visibility via pb-selected class
-  }
-  pbUpdateSelectBar();
-}
-
-function pbSelectAll() {
-  const list = document.getElementById('phonebook-list');
-  if (!list) return;
-  list.querySelectorAll('[data-pbid]').forEach(row => {
-    pbSelectedIds.add(row.dataset.pbid);
-    row.classList.add('pb-selected');
-  });
-  pbUpdateSelectBar();
-}
-
-function pbUpdateSelectBar() {
-  const count = pbSelectedIds.size;
-  const bar   = document.getElementById('pb-select-bar');
-  const label = document.getElementById('pb-select-count');
-  if (!bar) return;
-  if (count > 0 && pbSelectMode) {
-    bar.classList.add('visible');
-    if (label) label.textContent = count + ' selected';
-  } else {
-    bar.classList.remove('visible');
-  }
-}
-
-function pbDeleteSelected() {
-  const count = pbSelectedIds.size;
-  if (!count) return;
-  if (!confirm(`Delete ${count} contact${count !== 1 ? 's' : ''}? This cannot be undone.`)) return;
-
-  // Only delete from phonebookContacts (not campaign contacts)
-  const toDelete = new Set([...pbSelectedIds].filter(id => !id.startsWith('camp_')));
-  phonebookContacts = phonebookContacts.filter(c => !toDelete.has(c.id));
-
-  pbSelectedIds.clear();
-  pbUpdateSelectBar();
-  renderPhonebook();
-  saveAll(false);
-  showSaveToast(`Removed ${toDelete.size} contact${toDelete.size !== 1 ? 's' : ''}`);
-}
-
 
 function renderPhonebook() {
   const el = document.getElementById('phonebook-list');
   if (!el) return;
-  // Restore select-mode class after innerHTML wipe
-  el.classList.toggle('pb-select-mode', pbSelectMode);
 
   // ── Normalize: ensure every phonebookContact has an id ──
   let needsSave = false;
@@ -6408,13 +6188,8 @@ function renderPhonebook() {
 
   if (pbViewMode === 'list') {
     el.innerHTML = `<div class="pb-list-view">${filtered.map(c => {
-      const sel = pbSelectedIds.has(c.id);
-      return `<div class="pb-list-row${sel ? ' pb-selected' : ''}" data-pbid="${c.id}"
-                   onclick="pbRowClick(event,'${c.id}')"
+      return `<div class="pb-list-row"
                    oncontextmenu="showPbCtx(event,'${c.id}')">
-        <div class="pb-check" onclick="event.stopPropagation();pbToggleSelect('${c.id}')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
         <div class="cc-av" style="width:34px;height:34px;border-radius:8px;font-size:calc(11px * var(--ts));">${(c.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
         <div>
           <div style="font-size:calc(13px * var(--ts));font-weight:600;color:var(--text);">${c.name}</div>
@@ -6429,13 +6204,8 @@ function renderPhonebook() {
   } else {
     el.innerHTML = filtered.map(c => {
       const ins = (c.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-      const sel = pbSelectedIds.has(c.id);
-      return `<div class="cc${sel ? ' pb-selected' : ''}" data-pbid="${c.id}"
-                   onclick="pbRowClick(event,'${c.id}')"
+      return `<div class="cc"
                    oncontextmenu="showPbCtx(event,'${c.id}')">
-        <div class="pb-check" onclick="event.stopPropagation();pbToggleSelect('${c.id}')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
         <div class="cc-av">${ins}</div>
         <div class="cc-info"><div class="cc-name">${c.name}</div><div class="cc-role">${c.role||''}</div></div>
         <div class="cc-r"><span class="cc-co">${c.campaign||''}</span>${c.leadType?`<span class="bd bg">${c.leadType}</span>`:''}</div>
@@ -7409,16 +7179,13 @@ function mpInit() {
   mpRenderAvatar();
   mpLiveUpdate();
 
-  // Show view if profile has name, else show edit / onboard
-  if (mpProfile['name']) {
-    mpShowView();
-  } else {
-    mpShowEdit();
-    if (!localStorage.getItem('343leads_visited')) {
-      setTimeout(() => {
-        document.getElementById('mp-onboard-overlay').style.display = 'flex';
-      }, 400);
-    }
+  // Show view card (with empty-state prompt if no name yet)
+  mpShowView();
+  // First-visit onboarding
+  if (!mpProfile['name'] && !localStorage.getItem('343leads_visited')) {
+    setTimeout(() => {
+      document.getElementById('mp-onboard-overlay').style.display = 'flex';
+    }, 400);
   }
 }
 
@@ -7454,7 +7221,22 @@ function mpRenderView() {
   if (!el) return;
   const p = mpProfile;
   const name = p['name'] || '';
-  if (!name) { el.innerHTML = ''; return; }
+  if (!name) {
+    // Show empty state prompt — tab stays in view mode with a CTA
+    el.innerHTML =
+      '<div class="mpv-empty">' +
+        '<div class="mpv-empty-icon">' +
+          '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>' +
+        '</div>' +
+        '<div class="mpv-empty-title">Set up your profile</div>' +
+        '<div class="mpv-empty-sub">Add your name, bio, skills, and links so your campaigns reflect who you are.</div>' +
+        '<button class="sb p" onclick="mpShowEdit()" style="margin-top:4px;">Build My Profile</button>' +
+      '</div>';
+    // Keep view mode visible (don't switch to edit-mode)
+    const tab = document.getElementById('tab-player');
+    if (tab) tab.classList.remove('edit-mode');
+    return;
+  }
 
   // Avatar HTML
   let avatarHtml = '';
@@ -8352,6 +8134,7 @@ function nepSave(stepId) {
 
 
 
+</script>
 </script>
 
 <!-- ═══════ CREATION WIZARD ═══════ -->

@@ -2741,42 +2741,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 .pb-sel-toggle svg{width:13px;height:13px;}
 
 
-/* ══ CUSTOM CURSOR ════════════════════════════════════════ */
-html, html * { cursor: none !important; }
-#cursor {
-  position: fixed;
-  left: -100px; top: -100px;
-  width: 18px; height: 18px;
-  border: 1.5px solid var(--c1);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 99999;
-  transform: translate(-50%,-50%);
-  transition: width .18s ease, height .18s ease, background .18s ease, border-color .18s ease;
-  will-change: left, top;
-}
-#cursor.hover {
-  width: 38px; height: 38px;
-  background: rgba(var(--c1-rgb), .12);
-  border-color: var(--c1);
-}
-#cursor.cursor-contrast {
-  border-color: #fff;
-  mix-blend-mode: difference;
-}
-#cursor-dot {
-  position: fixed;
-  left: -100px; top: -100px;
-  width: 4px; height: 4px;
-  background: var(--c1);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 100000;
-  transform: translate(-50%,-50%);
-  transition: background .18s;
-  will-change: left, top;
-}
-#cursor-dot.cursor-contrast { background: #fff; }
+
 
 </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -8386,51 +8351,6 @@ function nepSave(stepId) {
 
 
 
-/* ══════════════════════════════════════════
-   CUSTOM CURSOR SYSTEM (matches 80AD)
-══════════════════════════════════════════ */
-(function() {
-  const cur = document.getElementById('cursor');
-  const dot = document.getElementById('cursor-dot');
-  if (!cur || !dot) return;
-
-  // Use direct style assignment (fastest — no transitions on position)
-  document.addEventListener('mousemove', function(e) {
-    cur.style.left = e.clientX + 'px';
-    cur.style.top  = e.clientY + 'px';
-    dot.style.left = e.clientX + 'px';
-    dot.style.top  = e.clientY + 'px';
-  }, { passive: true });
-
-  // Hover expand on any interactive element
-  function addHover(el) {
-    if (el._cursorBound) return;
-    el._cursorBound = true;
-    el.addEventListener('mouseenter', function() { cur.classList.add('hover'); });
-    el.addEventListener('mouseleave', function() { cur.classList.remove('hover'); });
-  }
-
-  function bindAll() {
-    document.querySelectorAll(
-      'button, a, input, textarea, select, label, [onclick], [oncontextmenu], ' +
-      '.sb, .tab-btn, .tb-btn, .nav-btn, .home-fab, .mp-avatar, ' +
-      '.camp-ctx-item, .pb-list-row, .cc, .mpv-link-btn, .mpv-edit-btn, ' +
-      '.dup-act, .pb-select-action, .pb-sel-toggle, .icon-pick-btn, .theme-combo'
-    ).forEach(addHover);
-  }
-
-  // Bind on load
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bindAll);
-  } else {
-    bindAll();
-  }
-  setTimeout(bindAll, 600);
-
-  // Re-bind after dynamic renders
-  const obs = new MutationObserver(bindAll);
-  obs.observe(document.body, { childList: true, subtree: true });
-})();
 
 </script>
 
@@ -8670,7 +8590,5 @@ function nepSave(stepId) {
   </div>
 </div>
 
-<div id="cursor"></div>
-<div id="cursor-dot"></div>
 </body>
 </html>
